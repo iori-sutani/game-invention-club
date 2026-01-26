@@ -19,7 +19,7 @@ export default function Home() {
           </Link>
           
           <div className="flex gap-4">
-            <Link href="/games" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#c46237] text-white hover:bg-[#e45c10] no-underline shadow-[4px_4px_0_#000]">
+            <Link href="/games" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#fbad08] text-white hover:bg-yellow-300 no-underline shadow-[4px_4px_0_#000]">
               一覧
             </Link>
             <Link href="/submit" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#fbad08] text-black hover:bg-yellow-300 no-underline shadow-[4px_4px_0_#000]">
