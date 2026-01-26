@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ピクセルフォント */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --pixel-font: 'Press Start 2P', cursive;
+}
+
+body {
+  font-family: var(--pixel-font);
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* ピクセルテキストスタイル */
+.pixel-text {
+  font-family: var(--pixel-font);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* ピクセル風ボーダー（ドット調のコーナー） */
+.pixel-corners {
+  clip-path: polygon(
+    0 4px, 4px 4px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+}
+
+/* ピクセル風ボタン */
+.pixel-button {
+  position: relative;
+  clip-path: polygon(
+    0 4px, 4px 4px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.pixel-button:active {
+  transform: translateY(2px);
+}
+
+/* フローティングアニメーション */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* グロー効果 */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.8);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* カスタムスクロールバー */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-left: 4px solid #22d3ee;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #22d3ee, #a855f7);
+  clip-path: polygon(
+    0 2px, 2px 2px, 2px 0,
+    calc(100% - 2px) 0, calc(100% - 2px) 2px, 100% 2px,
+    100% calc(100% - 2px), calc(100% - 2px) calc(100% - 2px), calc(100% - 2px) 100%,
+    2px 100%, 2px calc(100% - 2px), 0 calc(100% - 2px)
+  );
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #06b6d4, #9333ea);
+}
+
+/* セレクション */
+::selection {
+  background: rgba(168, 85, 247, 0.5);
+  color: #22d3ee;
+}
+
+/* リンクホバー効果 */
+a {
+  transition: all 0.2s ease;
+}
+
+/* フォーム要素 */
+input, textarea, select {
+  font-family: var(--pixel-font);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(34, 211, 238, 0.5);
+}
+
+/* レスポンシブテキストサイズ */
+@media (max-width: 768px) {
+  .pixel-text {
+    font-size: 0.875rem;
+  }
+}
