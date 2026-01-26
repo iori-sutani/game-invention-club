@@ -41,18 +41,14 @@ export default function SubmitPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900">
-      {/* Scanline effect */}
-      <div className="pointer-events-none fixed inset-0 z-50 opacity-5 bg-repeat" style={{
-        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)'
-      }}></div>
+    <div className="min-h-screen font-pixel text-[#331100]">
 
       {/* Success Message */}
       {showSuccess && (
         <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
-          <div className="pixel-corners bg-gradient-to-r from-cyan-400 to-purple-500 p-1">
-            <div className="pixel-corners bg-slate-900 px-8 py-4">
-              <p className="text-2xl text-cyan-400 pixel-text font-bold">
+          <div className="bg-[#fbad08] nes-container !p-0">
+            <div className="bg-white px-8 py-4">
+              <p className="text-2xl text-black font-bold">
                 🎉 投稿成功!
               </p>
             </div>
@@ -61,49 +57,49 @@ export default function SubmitPage() {
       )}
 
       {/* Header */}
-      <header className="border-b-4 border-cyan-400 bg-slate-900/90 backdrop-blur-sm sticky top-0 z-40">
+      <header className="border-b-4 border-black bg-[#8b4513] sticky top-0 z-40">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-500 relative pixel-corners">
-              <div className="absolute inset-1 bg-slate-900 flex items-center justify-center">
-                <span className="text-2xl">🎮</span>
-              </div>
+            <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
+              <span className="text-2xl">🎮</span>
             </div>
-            <h1 className="text-3xl font-bold text-cyan-400 pixel-text tracking-wider group-hover:text-purple-400 transition-colors">
+            <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#000] group-hover:text-[#fbad08] transition-colors">
               ゲーム発明会
             </h1>
           </Link>
           
           <div className="flex gap-4">
-            <Link href="/games" className="pixel-button px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold pixel-text tracking-wider transition-all">
+            <Link href="/games" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#c46237] text-white hover:bg-[#e45c10] no-underline shadow-[4px_4px_0_#000]">
               一覧
             </Link>
-            <Link href="/submit" className="pixel-button px-6 py-3 bg-cyan-500 text-slate-900 font-bold pixel-text tracking-wider">
+            <Link href="/submit" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#fbad08] text-black hover:bg-yellow-300 no-underline shadow-[4px_4px_0_#000]">
               投稿
             </Link>
           </div>
         </nav>
       </header>
 
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+
+      <div className="container mx-auto px-4 py-12 max-w-4xl min-h-screen">
         {/* Title */}
         <div className="text-center mb-12">
           <div className="inline-block mb-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-cyan-400 to-purple-500 pixel-corners relative animate-float">
-              <div className="absolute inset-2 bg-slate-900 flex items-center justify-center">
-                <span className="text-5xl">📤</span>
-              </div>
+            <div className="w-24 h-24 bg-white nes-container !p-0 flex items-center justify-center animate-float">
+              <span className="text-5xl">📤</span>
             </div>
           </div>
-          <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 pixel-text mb-4">
+          <h2 className="text-4xl md:text-5xl font-black text-[#8b4513] mb-4 drop-shadow-[3px_3px_0_#fff]" style={{ textShadow: '3px 3px 0 #fff, 5px 5px 0 #000' }}>
             ゲームを投稿
           </h2>
-          <p className="text-xl text-purple-300 pixel-text">
-            あなたの発明を世界に共有しよう!
-          </p>
+          <div className="nes-container inline-block bg-white mt-4">
+            <p className="text-xl text-[#331100]">
+              あなたの発明を世界に共有しよう!
+            </p>
+          </div>
         </div>
 
         {/* Form */}
+        <div className="nes-container bg-[#f8dcb4] mb-12">
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Game Title */}
           <FormField label="ゲームタイトル" required>
@@ -112,7 +108,7 @@ export default function SubmitPage() {
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="例: 顔面ハンマー投げ"
-              className="w-full px-6 py-4 bg-slate-800 border-4 border-cyan-400 text-cyan-100 pixel-text text-lg focus:outline-none focus:border-purple-400 transition-colors pixel-corners"
+              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
               required
             />
           </FormField>
@@ -124,7 +120,7 @@ export default function SubmitPage() {
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
               placeholder="どんなゲームですか? どこが新しいですか?"
               rows={5}
-              className="w-full px-6 py-4 bg-slate-800 border-4 border-cyan-400 text-cyan-100 pixel-text text-lg focus:outline-none focus:border-purple-400 transition-colors pixel-corners resize-none"
+              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors resize-none shadow-[inset_4px_4px_0_#ccc]"
               required
             />
           </FormField>
@@ -136,7 +132,7 @@ export default function SubmitPage() {
               value={formData.vercelUrl}
               onChange={(e) => setFormData(prev => ({ ...prev, vercelUrl: e.target.value }))}
               placeholder="https://your-game.vercel.app"
-              className="w-full px-6 py-4 bg-slate-800 border-4 border-cyan-400 text-cyan-100 pixel-text text-lg focus:outline-none focus:border-purple-400 transition-colors pixel-corners"
+              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
               required
             />
           </FormField>
@@ -148,7 +144,7 @@ export default function SubmitPage() {
               value={formData.githubUrl}
               onChange={(e) => setFormData(prev => ({ ...prev, githubUrl: e.target.value }))}
               placeholder="https://github.com/username/repo"
-              className="w-full px-6 py-4 bg-slate-800 border-4 border-cyan-400 text-cyan-100 pixel-text text-lg focus:outline-none focus:border-purple-400 transition-colors pixel-corners"
+              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
               required
             />
           </FormField>
@@ -160,13 +156,13 @@ export default function SubmitPage() {
               value={formData.qiitaUrl}
               onChange={(e) => setFormData(prev => ({ ...prev, qiitaUrl: e.target.value }))}
               placeholder="https://qiita.com/username/items/..."
-              className="w-full px-6 py-4 bg-slate-800 border-4 border-purple-400 text-cyan-100 pixel-text text-lg focus:outline-none focus:border-cyan-400 transition-colors pixel-corners"
+              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
             />
           </FormField>
 
           {/* Screenshot Upload */}
           <FormField label="スクリーンショット" required>
-            <div className="border-4 border-dashed border-cyan-400 bg-slate-800 p-8 text-center pixel-corners hover:border-purple-400 transition-colors">
+            <div className="border-4 border-dashed border-black bg-[#f8dcb4] p-8 text-center hover:bg-white transition-colors cursor-pointer">
               <input
                 type="file"
                 accept="image/*"
@@ -175,12 +171,12 @@ export default function SubmitPage() {
                 id="screenshot-upload"
                 required
               />
-              <label htmlFor="screenshot-upload" className="cursor-pointer">
+              <label htmlFor="screenshot-upload" className="cursor-pointer block w-full h-full">
                 <div className="text-6xl mb-4">📸</div>
-                <p className="text-xl text-cyan-400 pixel-text mb-2">
+                <p className="text-xl text-[#331100] mb-2 font-bold">
                   クリックして画像をアップロード
                 </p>
-                <p className="text-purple-300 pixel-text">
+                <p className="text-[#331100] text-sm opacity-75">
                   {formData.screenshot ? formData.screenshot.name : 'PNG, JPG, GIF (最大5MB)'}
                 </p>
               </label>
@@ -195,18 +191,19 @@ export default function SubmitPage() {
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
-                  className={`pixel-button px-4 py-2 pixel-text font-bold transition-all ${
+                  className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
                     formData.tags.includes(tag)
-                      ? 'bg-purple-500 text-white'
-                      : 'bg-slate-800 text-cyan-400 hover:bg-slate-700'
+                      ? 'bg-[#e45c10] text-white translate-x-[2px] translate-y-[2px] shadow-none border-black'
+                      : 'bg-white text-black hover:bg-gray-100 shadow-[4px_4px_0_#000] border-black'
                   }`}
                 >
+                  {formData.tags.includes(tag) && <span className="mr-2">✔️</span>}
                   {tag}
                 </button>
               ))}
             </div>
             {formData.tags.length > 0 && (
-              <div className="mt-4 text-cyan-400 pixel-text">
+              <div className="mt-4 text-[#331100] text-sm font-bold">
                 選択中: {formData.tags.join(', ')}
               </div>
             )}
@@ -216,24 +213,23 @@ export default function SubmitPage() {
           <div className="pt-8">
             <button
               type="submit"
-              className="w-full pixel-button px-8 py-6 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white text-2xl font-bold pixel-text tracking-wider transition-all transform hover:scale-105"
+              className="w-full pixel-button px-8 py-6 bg-[#e45c10] hover:bg-[#c7004c] text-white text-2xl font-bold tracking-wider transition-all transform hover:scale-105 shadow-[6px_6px_0_#000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0_#000] animate-pulse"
             >
-              🚀 投稿する
+              🚀 INSERT COIN TO SUBMIT
             </button>
           </div>
         </form>
+        </div>
 
         {/* Info Box */}
-        <div className="mt-12 pixel-corners bg-gradient-to-r from-purple-600 to-cyan-600 p-1">
-          <div className="pixel-corners bg-slate-900 p-6">
-            <h3 className="text-2xl font-bold text-cyan-400 pixel-text mb-3">📋 投稿ガイドライン</h3>
-            <ul className="space-y-2 text-purple-300 pixel-text">
-              <li>• 既存ゲームのコピーではなく、独自の工夫があること</li>
-              <li>• GitHubでソースコードを公開すること</li>
-              <li>• 技術的な解説があると他の開発者の学びになります</li>
-              <li>• 楽しく、クリエイティブな作品をお待ちしています!</li>
-            </ul>
-          </div>
+        <div className="mt-12 bg-white nes-container">
+          <h3 className="text-2xl font-bold text-[#8b4513] mb-3 border-b-4 border-black pb-2">📋 投稿ガイドライン</h3>
+          <ul className="space-y-4 text-[#331100] list-disc list-inside">
+            <li>既存ゲームのコピーではなく、独自の工夫があること</li>
+            <li>GitHubでソースコードを公開すること</li>
+            <li>技術的な解説があると他の開発者の学びになります</li>
+            <li>楽しく、クリエイティブな作品をお待ちしています!</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -252,9 +248,9 @@ function FormField({
   return (
     <div>
       <label className="block mb-3">
-        <span className="text-2xl font-bold text-cyan-400 pixel-text">
+        <span className="text-xl md:text-2xl font-bold text-[#331100] block border-l-8 border-[#e45c10] pl-3">
           {label}
-          {required && <span className="text-purple-400 ml-2">*</span>}
+          {required && <span className="text-[#8b4513] ml-2 text-sm">(必須)</span>}
         </span>
       </label>
       {children}

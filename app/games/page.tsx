@@ -98,40 +98,34 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900">
-      {/* Scanline effect */}
-      <div className="pointer-events-none fixed inset-0 z-50 opacity-5 bg-repeat" style={{
-        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)'
-      }}></div>
+    <div className="min-h-screen font-pixel text-[#331100]">
 
       {/* Header */}
-      <header className="border-b-4 border-cyan-400 bg-slate-900/90 backdrop-blur-sm sticky top-0 z-40">
+      <header className="border-b-4 border-black bg-[#8b4513] sticky top-0 z-40">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-500 relative pixel-corners">
-              <div className="absolute inset-1 bg-slate-900 flex items-center justify-center">
-                <span className="text-2xl">🎮</span>
-              </div>
+            <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
+              <span className="text-2xl">🎮</span>
             </div>
-            <h1 className="text-3xl font-bold text-cyan-400 pixel-text tracking-wider group-hover:text-purple-400 transition-colors">
+            <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#000] group-hover:text-[#fbad08] transition-colors">
               ゲーム発明会
             </h1>
           </Link>
           
           <div className="flex gap-4">
-            <Link href="/games" className="pixel-button px-6 py-3 bg-purple-600 text-white font-bold pixel-text tracking-wider">
+            <Link href="/games" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#c46237] text-white hover:bg-[#e45c10] no-underline shadow-[4px_4px_0_#000]">
               一覧
             </Link>
-            <Link href="/submit" className="pixel-button px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold pixel-text tracking-wider transition-all">
+            <Link href="/submit" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#fbad08] text-black hover:bg-yellow-300 no-underline shadow-[4px_4px_0_#000]">
               投稿
             </Link>
           </div>
         </nav>
       </header>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 min-h-screen">
         {/* Title */}
-        <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 pixel-text mb-8 text-center">
+        <h2 className="text-4xl md:text-5xl font-black text-[#8b4513] mb-8 text-center drop-shadow-[3px_3px_0_#fff]" style={{ textShadow: '3px 3px 0 #fff, 5px 5px 0 #000' }}>
           ゲーム一覧
         </h2>
 
@@ -144,25 +138,30 @@ export default function GamesPage() {
               placeholder="ゲームを検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-4 bg-slate-800 border-4 border-cyan-400 text-cyan-100 pixel-text text-lg focus:outline-none focus:border-purple-400 transition-colors pixel-corners"
+              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[4px_4px_0_#000]"
             />
           </div>
 
+
           {/* Tag Filter */}
           <div className="flex flex-wrap gap-3">
-            {allTags.map(tag => (
-              <button
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                className={`pixel-button px-4 py-2 pixel-text font-bold transition-all ${
-                  selectedTags.includes(tag)
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-slate-800 text-cyan-400 hover:bg-slate-700'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
+            {allTags.map(tag => {
+              const isSelected = selectedTags.includes(tag);
+              return (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
+                    isSelected
+                      ? 'bg-[#e45c10] text-white translate-x-[2px] translate-y-[2px] shadow-none border-black'
+                      : 'bg-white text-black hover:bg-gray-100 shadow-[4px_4px_0_#000] border-black'
+                  }`}
+                >
+                  {isSelected && <span className="mr-2">✔️</span>}
+                  {tag}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -176,7 +175,7 @@ export default function GamesPage() {
         {filteredGames.length === 0 && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
-            <p className="text-2xl text-purple-300 pixel-text">ゲームが見つかりませんでした</p>
+            <p className="text-2xl text-[#331100]">ゲームが見つかりませんでした</p>
           </div>
         )}
       </div>
@@ -186,73 +185,73 @@ export default function GamesPage() {
 
 function GameCard({ game }: { game: typeof dummyGames[0] }) {
   return (
-    <div className="group">
-      <div className="pixel-corners bg-gradient-to-br from-cyan-600 to-purple-600 p-1 transition-all group-hover:scale-105 group-hover:shadow-2xl">
-        <div className="pixel-corners bg-slate-900 h-full">
-          {/* Screenshot */}
-          <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center border-b-4 border-cyan-400">
-            <span className="text-8xl">{game.screenshot}</span>
+    <div className="group h-full">
+      <div className="nes-container h-full transition-transform group-hover:-translate-y-2 !p-0 overflow-hidden bg-white">
+        {/* Screenshot */}
+        <div className="aspect-video bg-[#f8dcb4] flex items-center justify-center border-b-4 border-black relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
+          {/* Scanline decoration for cards */}
+          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)' }}></div>
+          <span className="text-8xl relative z-10 drop-shadow-md">{game.screenshot}</span>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <h3 className="text-xl font-bold text-[#8b4513] mb-2 group-hover:text-[#c46237] transition-colors">
+            {game.title}
+          </h3>
+          <p className="text-[#331100] mb-4 line-clamp-2 text-sm">
+            {game.description}
+          </p>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {game.tags.map(tag => (
+              <span
+                key={tag}
+                className="px-2 py-1 bg-gray-100 text-[#331100] text-xs border-2 border-black"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
 
-          {/* Content */}
-          <div className="p-6">
-            <h3 className="text-2xl font-bold text-cyan-400 pixel-text mb-2 group-hover:text-purple-400 transition-colors">
-              {game.title}
-            </h3>
-            
-            <p className="text-purple-300 pixel-text mb-4 line-clamp-2">
-              {game.description}
-            </p>
+          {/* Author & Likes */}
+          <div className="flex items-center justify-between mb-4 text-[#c46237] text-sm font-bold">
+            <span>by {game.author}</span>
+            <span className="flex items-center gap-1 text-[#e45c10]">
+              ❤️ {game.likes}
+            </span>
+          </div>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {game.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-slate-800 text-cyan-400 pixel-text text-sm border-2 border-cyan-400"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Author & Likes */}
-            <div className="flex items-center justify-between mb-4 text-purple-300 pixel-text">
-              <span>by {game.author}</span>
-              <span className="flex items-center gap-1">
-                ❤️ {game.likes}
-              </span>
-            </div>
-
-            {/* Links */}
-            <div className="flex gap-2">
+          {/* Links */}
+          <div className="flex gap-2">
+            <a
+              href={game.vercelUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 pixel-button px-4 py-2 bg-[#fbad08] hover:bg-yellow-300 text-black text-center font-bold transition-all shadow-[2px_2px_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+            >
+              プレイ
+            </a>
+            {game.githubUrl && (
               <a
-                href={game.vercelUrl}
+                href={game.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 pixel-button px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-center pixel-text font-bold transition-all"
+                className="pixel-button px-4 py-2 bg-[#333] hover:bg-[#000] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                title="GitHub"
               >
-                プレイ
+                📦
               </a>
-              {game.githubUrl && (
-                <a
-                  href={game.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pixel-button px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 pixel-text font-bold transition-all"
-                  title="GitHub"
-                >
-                  📦
-                </a>
-              )}
-              {game.qiitaUrl && (
-                <a
-                  href={game.qiitaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pixel-button px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 pixel-text font-bold transition-all"
-                  title="Qiita"
-                >
+            )}
+            {game.qiitaUrl && (
+              <a
+                href={game.qiitaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pixel-button px-4 py-2 bg-[#8b4513] hover:bg-[#5e300d] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                title="Qiita"
+              >
                   📝
                 </a>
               )}
@@ -260,6 +259,5 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
           </div>
         </div>
       </div>
-    </div>
   );
 }
