@@ -135,6 +135,9 @@ export default function SubmitPage() {
               className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
               required
             />
+            <p className="mt-2 text-sm text-[#8b4513] font-bold">
+              ※アカウント登録なしですぐに遊べるURLを入力してください
+            </p>
           </FormField>
 
           {/* GitHub URL */}
@@ -226,6 +229,7 @@ export default function SubmitPage() {
           <h3 className="text-2xl font-bold text-[#8b4513] mb-3 border-b-4 border-black pb-2">📋 投稿ガイドライン</h3>
           <ul className="space-y-4 text-[#331100] list-disc list-inside">
             <li>既存ゲームのコピーではなく、独自の工夫があること</li>
+            <li>遊ぶ際にアカウント作成やログインを求めないこと（誰でもすぐに遊べるようにしてください）</li>
             <li>GitHubでソースコードを公開すること</li>
             <li>技術的な解説があると他の開発者の学びになります</li>
             <li>楽しく、クリエイティブな作品をお待ちしています!</li>
