@@ -105,7 +105,7 @@ export default function GamesPage() {
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
-              <span className="text-2xl">🎮</span>
+              <span className="text-2xl pixelated">🎮</span>
             </div>
             <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#000] group-hover:text-[#fbad08] transition-colors">
               ゲーム発明会
@@ -153,11 +153,10 @@ export default function GamesPage() {
                   onClick={() => toggleTag(tag)}
                   className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
                     isSelected
-                      ? 'bg-[#e45c10] text-white translate-x-[2px] translate-y-[2px] shadow-none border-black'
-                      : 'bg-white text-black hover:bg-gray-100 shadow-[4px_4px_0_#000] border-black'
+                      ? '!bg-[#e45c10] !text-white translate-x-[2px] translate-y-[2px] !shadow-none !border-black'
+                      : '!bg-white !text-black hover:!bg-gray-100 shadow-[4px_4px_0_#000] !border-black'
                   }`}
                 >
-                  {isSelected && <span className="mr-2">✔️</span>}
                   {tag}
                 </button>
               );
@@ -174,7 +173,7 @@ export default function GamesPage() {
 
         {filteredGames.length === 0 && (
           <div className="text-center py-20">
-            <div className="text-6xl mb-4">🔍</div>
+            <div className="text-6xl mb-4 pixelated">🔍</div>
             <p className="text-2xl text-[#331100]">ゲームが見つかりませんでした</p>
           </div>
         )}
@@ -191,7 +190,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
         <div className="aspect-video bg-[#f8dcb4] flex items-center justify-center border-b-4 border-black relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
           {/* Scanline decoration for cards */}
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)' }}></div>
-          <span className="text-8xl relative z-10 drop-shadow-md">{game.screenshot}</span>
+          <span className="text-8xl relative z-10 drop-shadow-md pixelated">{game.screenshot}</span>
         </div>
 
         {/* Content */}
@@ -219,7 +218,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
           <div className="flex items-center justify-between mb-4 text-[#c46237] text-sm font-bold">
             <span>by {game.author}</span>
             <span className="flex items-center gap-1 text-[#e45c10]">
-              ❤️ {game.likes}
+              <span className="pixelated">❤️</span> {game.likes}
             </span>
           </div>
 
@@ -238,7 +237,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
                 href={game.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button px-4 py-2 bg-[#333] hover:bg-[#000] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button pixelated px-4 py-2 bg-[#333] hover:bg-[#000] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
                 title="GitHub"
               >
                 📦
@@ -249,7 +248,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
                 href={game.qiitaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button px-4 py-2 bg-[#8b4513] hover:bg-[#5e300d] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button pixelated px-4 py-2 bg-[#8b4513] hover:bg-[#5e300d] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
                 title="Qiita"
               >
                   📝

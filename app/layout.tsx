@@ -27,6 +27,17 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${dotGothic.variable} ${pressStart.variable} relative font-pixel`}>
+        {/* SVG Filter for pixelation effect on vector elements/emojis */}
+        <svg style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
+          <filter id="pixelate" x="0" y="0">
+            <feFlood x="2" y="2" height="2" width="2" />
+            <feComposite width="4" height="4" />
+            <feTile result="a" />
+            <feComposite in="SourceGraphic" in2="a" operator="in" />
+            <feMorphology operator="dilate" radius="2" />
+          </filter>
+        </svg>
+
         {/* 背景テクスチャ (全体に適用、最背面) */}
         <div className="fixed inset-0 z-[-1] pixel-pattern-bg"></div>
         <div className="fixed inset-0 z-[-1] scanlines-bg pointer-events-none"></div>

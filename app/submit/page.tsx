@@ -61,7 +61,7 @@ export default function SubmitPage() {
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
-              <span className="text-2xl">🎮</span>
+              <span className="text-2xl pixelated">🎮</span>
             </div>
             <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#000] group-hover:text-[#fbad08] transition-colors">
               ゲーム発明会
@@ -85,7 +85,7 @@ export default function SubmitPage() {
         <div className="text-center mb-12">
           <div className="inline-block mb-6">
             <div className="w-24 h-24 bg-white nes-container !p-0 flex items-center justify-center animate-float">
-              <span className="text-5xl">📤</span>
+              <span className="text-5xl pixelated">📤</span>
             </div>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-[#8b4513] mb-4 drop-shadow-[3px_3px_0_#fff]" style={{ textShadow: '3px 3px 0 #fff, 5px 5px 0 #000' }}>

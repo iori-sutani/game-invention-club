@@ -197,3 +197,13 @@ textarea::placeholder {
     font-size: 0.875rem;
   }
 }
+
+/* 任意の要素をドット絵風にするフィルタ */
+.pixelated {
+  filter: url(#pixelate);
+}
+
+/* 画像は強制的にピクセル化 */
+img {
+  image-rendering: pixelated;
+}

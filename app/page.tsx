@@ -11,7 +11,7 @@ export default function Home() {
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
-              <span className="text-2xl">🎮</span>
+              <span className="text-2xl pixelated">🎮</span>
             </div>
             <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#900] group-hover:text-[#fbad08] transition-colors">
               ゲーム発明会
@@ -39,7 +39,7 @@ export default function Home() {
         <div className="text-center mb-16 relative z-10">
           <div className="inline-block mb-8 animate-float">
             <div className="w-32 h-32 mx-auto bg-[#e45c10] border-4 border-black flex items-center justify-center shadow-[8px_8px_0_#000]">
-              <span className="text-6xl drop-shadow-md">💡</span>
+              <span className="text-6xl drop-shadow-md pixelated">💡</span>
             </div>
           </div>
           
@@ -113,7 +113,7 @@ export default function Home() {
 function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
   return (
     <div className="nes-container h-full transition-transform hover:-translate-y-2 hover:rotate-1">
-      <div className="text-5xl mb-4 text-center">{icon}</div>
+      <div className="text-5xl mb-4 text-center pixelated">{icon}</div>
       <h3 className="text-2xl font-bold mb-3 text-center border-b-4 border-black pb-2 text-[#8b4513]">{title}</h3>
       <p className="leading-relaxed mt-4 text-[#331100]">{description}</p>
     </div>
