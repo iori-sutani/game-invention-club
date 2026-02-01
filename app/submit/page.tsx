@@ -238,7 +238,7 @@ export default function SubmitPage() {
                   type="submit"
                   className="w-full pixel-button px-8 py-6 bg-[#e45c10] hover:bg-[#c7004c] text-white text-2xl font-bold tracking-wider transition-all transform hover:scale-105 shadow-[6px_6px_0_#000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0_#000] animate-pulse"
                 >
-                  🚀 INSERT COIN TO SUBMIT
+                  投稿する！
                 </button>
               </div>
             </form>

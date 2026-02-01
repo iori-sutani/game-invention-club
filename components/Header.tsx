@@ -69,7 +69,7 @@ export default function Header() {
             className={`pixel-button px-3 md:px-6 py-2 md:py-3 no-underline shadow-[4px_4px_0_#000] ${
               isGamesActive
                 ? 'bg-[#c46237] text-white hover:bg-[#e45c10]'
-                : 'bg-[#fbad08] text-black hover:bg-yellow-300'
+                : 'bg-[#fbad08] text-black hover:bg-[#8b4513] '
             }`}
           >
             一覧
@@ -79,7 +79,7 @@ export default function Header() {
             className={`pixel-button px-3 md:px-6 py-2 md:py-3 no-underline shadow-[4px_4px_0_#000] ${
               isSubmitActive
                 ? 'bg-[#c46237] text-white hover:bg-[#e45c10]'
-                : 'bg-[#fbad08] text-black hover:bg-yellow-300'
+                : 'bg-[#fbad08] text-black hover:bg-[#8b4513] '
             }`}
           >
             投稿
@@ -102,7 +102,7 @@ export default function Header() {
               </div>
               <button
                 onClick={handleLogout}
-                className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#5e300d] text-white hover:bg-yellow-300 shadow-[4px_4px_0_#000]"
+                className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#5e300d] text-white hover:bg-[#8b4513] shadow-[4px_4px_0_#000]"
               >
                 ログアウト
               </button>
@@ -110,7 +110,7 @@ export default function Header() {
           ) : (
             <button
               onClick={handleLogin}
-              className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#333] text-white hover:bg-yellow-300 hover:text-black shadow-[4px_4px_0_#000]"
+              className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#333] text-white hover:bg-[#8b4513] hover:text-black shadow-[4px_4px_0_#000]"
             >
               ログイン
             </button>

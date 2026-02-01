@@ -207,7 +207,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
               href={game.vercelUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 pixel-button px-4 py-2 bg-[#fbad08] hover:bg-yellow-300 text-black text-center font-bold transition-all shadow-[2px_2px_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="flex-1 pixel-button px-4 py-2 bg-[#fbad08] hover:bg-[#8b4513] text-black text-center font-bold transition-all shadow-[2px_2px_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
             >
               プレイ
             </a>
@@ -216,7 +216,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
                 href={game.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button pixelated px-4 py-2 bg-[#333] hover:bg-[#000] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button pixelated px-4 py-2 bg-[#333] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
                 title="GitHub"
               >
                 📦
@@ -227,7 +227,7 @@ function GameCard({ game }: { game: typeof dummyGames[0] }) {
                 href={game.qiitaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button pixelated px-4 py-2 bg-[#8b4513] hover:bg-[#5e300d] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button pixelated px-4 py-2 bg-[#8b4513] hover:bg-[#8b4513]  text-white font-bold transition-all shadow-[2px_2px_0_#000]"
                 title="Qiita"
               >
                   📝
