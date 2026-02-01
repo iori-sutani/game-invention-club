@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
+import Header from '@/components/Header';
 
 // ダミーデータ
 const dummyGames = [
@@ -100,28 +100,7 @@ export default function GamesPage() {
   return (
     <div className="min-h-screen font-pixel text-[#331100]">
 
-      {/* Header */}
-      <header className="border-b-4 border-black bg-[#8b4513] sticky top-0 z-40">
-        <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
-              <span className="text-2xl pixelated">🎮</span>
-            </div>
-            <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#000] group-hover:text-[#fbad08] transition-colors">
-              ゲーム発明会
-            </h1>
-          </Link>
-          
-          <div className="flex gap-4">
-            <Link href="/games" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#c46237] text-white hover:bg-[#e45c10] no-underline shadow-[4px_4px_0_#000]">
-              一覧
-            </Link>
-            <Link href="/submit" className="pixel-button px-4 md:px-6 py-2 md:py-3 bg-[#fbad08] text-black hover:bg-yellow-300 no-underline shadow-[4px_4px_0_#000]">
-              投稿
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <div className="container mx-auto px-4 py-12 min-h-screen">
         {/* Title */}
