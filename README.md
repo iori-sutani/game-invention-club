@@ -86,10 +86,12 @@ game-invention-club/
 │   │           ├── route.ts            # GET ユーザープロフィール
 │   │           └── games/route.ts      # GET ユーザーのゲーム一覧
 │   ├── games/page.tsx                  # ゲーム一覧ページ
-│   ├── submit/page.tsx                 # 投稿フォームページ
+│   ├── submit/page.tsx                 # 投稿フォームページ (ログインゲート付き)
 │   ├── page.tsx                        # ホーム画面
 │   ├── layout.tsx                      # ルートレイアウト
 │   └── globals.css                     # グローバルスタイル
+├── components/
+│   └── Header.tsx                      # 共通ヘッダー (ナビ + 認証UI)
 ├── lib/supabase/
 │   ├── client.ts                       # ブラウザ用クライアント
 │   ├── server.ts                       # サーバー用クライアント
@@ -124,7 +126,9 @@ RLS (Row Level Security) により、ゲームの編集・削除は投稿者の�
 - [x] ゲーム一覧 (検索・タグフィルタリング)
 - [x] 投稿フォーム (タグ選択付き)
 - [x] レスポンシブデザイン
-- [ ] ログイン/ログアウトUI
+- [x] 共通ヘッダーコンポーネント
+- [x] ログイン/ログアウトUI (GitHub OAuth)
+- [x] 投稿ページのログインゲート
 - [ ] いいねボタン
 - [ ] ユーザープロフィールページ
 
