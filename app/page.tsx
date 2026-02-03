@@ -8,11 +8,6 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 relative overflow-hidden">
-        {/* Decorative Grid Background */}
-        <div className="absolute inset-0 z-0 opacity-10" 
-          style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }}
-        ></div>
-
         <div className="text-center mb-16 relative z-10">
           <div className="inline-block mb-8 animate-float">
             <div className="w-32 h-32 mx-auto bg-[#e45c10] border-4 border-black flex items-center justify-center shadow-[8px_8px_0_#000]">

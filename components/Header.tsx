@@ -53,7 +53,7 @@ export default function Header() {
 
   return (
     <header className="border-b-4 border-black bg-[#8b4513] sticky top-0 z-50">
-      <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <nav className="px-4 md:px-8 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
             <span className="text-2xl pixelated">🎮</span>
