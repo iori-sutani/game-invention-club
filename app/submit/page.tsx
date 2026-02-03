@@ -161,19 +161,17 @@ export default function SubmitPage() {
               </FormField>
 
               {/* GitHub URL */}
-              <FormField label="GitHubリポジトリ" required>
+              <FormField label="GitHubリポジトリ（任意）">
                 <input
                   type="url"
                   value={formData.githubUrl}
                   onChange={(e) => setFormData(prev => ({ ...prev, githubUrl: e.target.value }))}
                   placeholder="https://github.com/username/repo"
                   className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
-                  required
                 />
               </FormField>
-
               {/* Qiita URL (Optional) */}
-              <FormField label="Qiita解説記事 (任意)">
+              <FormField label="Qiita解説記事（任意）">
                 <input
                   type="url"
                   value={formData.qiitaUrl}

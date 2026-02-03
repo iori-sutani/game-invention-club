@@ -44,7 +44,7 @@ export type Database = {
           description: string;
           screenshot_url: string;
           vercel_url: string;
-          github_url: string;
+          github_url?: string;
           qiita_url: string | null;
           created_at: string;
           updated_at: string;
@@ -56,7 +56,7 @@ export type Database = {
           description: string;
           screenshot_url: string;
           vercel_url: string;
-          github_url: string;
+          github_url?: string;
           qiita_url?: string | null;
           created_at?: string;
           updated_at?: string;

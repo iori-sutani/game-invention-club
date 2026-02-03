@@ -113,7 +113,7 @@ export async function POST(request: Request) {
   const { title, description, screenshot_url, vercel_url, github_url, qiita_url, tags } = body;
 
   // Validate required fields
-  if (!title || !description || !screenshot_url || !vercel_url || !github_url) {
+  if (!title || !description || !screenshot_url || !vercel_url) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
   }
 
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
       description,
       screenshot_url,
       vercel_url,
-      github_url,
+      github_url: github_url || null,
       qiita_url: qiita_url || null,
     })
     .select()

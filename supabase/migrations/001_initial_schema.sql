@@ -52,7 +52,7 @@ CREATE TABLE games (
   description TEXT NOT NULL,
   screenshot_url VARCHAR NOT NULL,
   vercel_url VARCHAR NOT NULL,
-  github_url VARCHAR NOT NULL,
+  github_url VARCHAR,
   qiita_url VARCHAR,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
