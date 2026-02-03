@@ -1,30 +1,19 @@
-import { createClient } from '@/lib/supabase/server';
+import { createRepositories } from '@/lib/repositories';
 import { NextResponse } from 'next/server';
 
 // GET /api/tags - Get all tags with optional search
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const query = searchParams.get('q');
+  const query = searchParams.get('q') || undefined;
   const limit = parseInt(searchParams.get('limit') || '50');
 
-  const supabase = await createClient();
+  const { tags } = await createRepositories();
 
-  let dbQuery = supabase
-    .from('tags')
-    .select('*')
-    .order('usage_count', { ascending: false })
-    .limit(limit);
-
-  // Apply search filter if provided
-  if (query) {
-    dbQuery = dbQuery.ilike('name', `%${query}%`);
+  try {
+    const tagList = await tags.list({ query, limit });
+    return NextResponse.json(tagList);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
-
-  const { data: tags, error } = await dbQuery;
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json(tags);
 }
