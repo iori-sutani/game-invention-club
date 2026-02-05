@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createRepositories } from '@/lib/repositories';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -7,27 +7,23 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/';
 
   if (code) {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    const { auth, users } = await createRepositories();
+    const authUser = await auth.exchangeCodeForSession(code);
 
-    if (!error && data.user) {
+    if (authUser) {
       // Check if user exists in our users table
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('github_id', data.user.id)
-        .single();
+      const existingUser = await users.findByGithubId(authUser.id);
 
       // If user doesn't exist, create them
       if (!existingUser) {
-        const { error: insertError } = await supabase.from('users').insert({
-          github_id: data.user.id,
-          username: data.user.user_metadata.user_name || data.user.user_metadata.name || 'Anonymous',
-          avatar_url: data.user.user_metadata.avatar_url,
-        });
-
-        if (insertError) {
-          console.error('Error creating user:', insertError);
+        try {
+          await users.create({
+            github_id: authUser.id,
+            username: authUser.userMetadata.userName || authUser.userMetadata.name || 'Anonymous',
+            avatar_url: authUser.userMetadata.avatarUrl || null,
+          });
+        } catch (error) {
+          console.error('Error creating user:', error);
         }
       }
 

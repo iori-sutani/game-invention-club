@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createRepositories } from '@/lib/repositories';
 import { NextResponse } from 'next/server';
 
 type Params = Promise<{ id: string }>;
@@ -6,43 +6,26 @@ type Params = Promise<{ id: string }>;
 // GET /api/users/[id] - Get a user by ID
 export async function GET(request: Request, { params }: { params: Params }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const { users, games, likes } = await createRepositories();
 
-  const { data: user, error } = await supabase
-    .from('users')
-    .select('id, username, avatar_url, created_at')
-    .eq('id', id)
-    .single();
-
-  if (error || !user) {
+  const user = await users.findById(id);
+  if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
   // Get games count
-  const { count: gamesCount } = await supabase
-    .from('games')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', id);
+  const gamesCount = await games.countByUserId(id);
 
   // Get total likes received
-  const { data: games } = await supabase
-    .from('games')
-    .select('id')
-    .eq('user_id', id);
-
   let totalLikes = 0;
-  if (games && games.length > 0) {
-    const gameIds = games.map(g => g.id);
-    const { count: likesCount } = await supabase
-      .from('likes')
-      .select('*', { count: 'exact', head: true })
-      .in('game_id', gameIds);
-    totalLikes = likesCount || 0;
+  const gameIds = await games.listIdsByUserId(id);
+  if (gameIds.length > 0) {
+    totalLikes = await likes.countByGameIds(gameIds);
   }
 
   return NextResponse.json({
     ...user,
-    games_count: gamesCount || 0,
+    games_count: gamesCount,
     total_likes: totalLikes,
   });
 }

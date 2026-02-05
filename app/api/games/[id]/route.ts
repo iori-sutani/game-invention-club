@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createRepositories } from '@/lib/repositories';
 import { NextResponse } from 'next/server';
 
 type Params = Promise<{ id: string }>;
@@ -6,219 +6,133 @@ type Params = Promise<{ id: string }>;
 // GET /api/games/[id] - Get a single game
 export async function GET(request: Request, { params }: { params: Params }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const { auth, users, games, likes } = await createRepositories();
 
   // Get current user for is_liked field
-  const { data: { user } } = await supabase.auth.getUser();
+  const authUser = await auth.getUser();
   let currentUserId: string | null = null;
 
-  if (user) {
-    const { data: currentUser } = await supabase
-      .from('users')
-      .select('id')
-      .eq('github_id', user.id)
-      .single();
-    currentUserId = currentUser?.id || null;
+  if (authUser) {
+    const dbUser = await users.findByGithubId(authUser.id);
+    currentUserId = dbUser?.id || null;
   }
 
-  const { data: game, error } = await supabase
-    .from('games')
-    .select(`
-      *,
-      user:users(id, username, avatar_url),
-      game_tags(tag:tags(*)),
-      likes(count)
-    `)
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 404 });
+  const game = await games.findById(id);
+  if (!game) {
+    return NextResponse.json({ error: 'Game not found' }, { status: 404 });
   }
 
   // Check if current user liked this game
   let isLiked = false;
   if (currentUserId) {
-    const { data: likeData } = await supabase
-      .from('likes')
-      .select('id')
-      .eq('user_id', currentUserId)
-      .eq('game_id', id)
-      .single();
-    isLiked = !!likeData;
+    isLiked = await likes.exists(currentUserId, id);
   }
 
-  const transformedGame = {
-    id: game.id,
-    title: game.title,
-    description: game.description,
-    screenshot_url: game.screenshot_url,
-    vercel_url: game.vercel_url,
-    github_url: game.github_url,
-    qiita_url: game.qiita_url,
-    created_at: game.created_at,
-    updated_at: game.updated_at,
-    user: game.user,
-    tags: game.game_tags?.map((gt: { tag: { id: string; name: string } }) => gt.tag) || [],
-    likes_count: game.likes?.[0]?.count || 0,
-    is_liked: isLiked,
-  };
-
-  return NextResponse.json(transformedGame);
+  return NextResponse.json({ ...game, is_liked: isLiked });
 }
 
 // PUT /api/games/[id] - Update a game
 export async function PUT(request: Request, { params }: { params: Params }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const { auth, users, games, tags } = await createRepositories();
 
   // Check authentication
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
+  const authUser = await auth.getUser();
+  if (!authUser) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   // Get user from our users table
-  const { data: dbUser } = await supabase
-    .from('users')
-    .select('id')
-    .eq('github_id', user.id)
-    .single();
-
+  const dbUser = await users.findByGithubId(authUser.id);
   if (!dbUser) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
   // Check if user owns this game
-  const { data: existingGame } = await supabase
-    .from('games')
-    .select('user_id')
-    .eq('id', id)
-    .single();
-
-  if (!existingGame) {
+  const ownerId = await games.getOwnerId(id);
+  if (!ownerId) {
     return NextResponse.json({ error: 'Game not found' }, { status: 404 });
   }
-
-  if (existingGame.user_id !== dbUser.id) {
+  if (ownerId !== dbUser.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   const body = await request.json();
-  const { title, description, screenshot_url, vercel_url, github_url, qiita_url, tags } = body;
+  const { title, description, screenshot_url, vercel_url, github_url, qiita_url, tags: tagNames } = body;
 
-  // Update the game
-  const { data: game, error: gameError } = await supabase
-    .from('games')
-    .update({
+  try {
+    // Update the game
+    const game = await games.update(id, {
       title,
       description,
       screenshot_url,
       vercel_url,
       github_url,
       qiita_url: qiita_url || null,
-    })
-    .eq('id', id)
-    .select()
-    .single();
+    });
 
-  if (gameError) {
-    return NextResponse.json({ error: gameError.message }, { status: 500 });
-  }
+    // Update tags if provided
+    if (tagNames !== undefined) {
+      // Delete existing tags
+      await tags.unlinkFromGame(id);
 
-  // Update tags if provided
-  if (tags !== undefined) {
-    // Delete existing tags
-    await supabase
-      .from('game_tags')
-      .delete()
-      .eq('game_id', id);
+      // Add new tags
+      if (tagNames.length > 0) {
+        const tagIds: string[] = [];
 
-    // Add new tags
-    if (tags.length > 0) {
-      const tagIds: string[] = [];
-
-      for (const tagName of tags) {
-        let { data: existingTag } = await supabase
-          .from('tags')
-          .select('id')
-          .eq('name', tagName)
-          .single();
-
-        if (!existingTag) {
-          const { data: newTag } = await supabase
-            .from('tags')
-            .insert({ name: tagName })
-            .select('id')
-            .single();
-          existingTag = newTag;
+        for (const tagName of tagNames) {
+          let tag = await tags.findByName(tagName);
+          if (!tag) {
+            tag = await tags.create(tagName);
+          }
+          tagIds.push(tag.id);
         }
 
-        if (existingTag) {
-          tagIds.push(existingTag.id);
+        if (tagIds.length > 0) {
+          await tags.linkToGame(id, tagIds);
         }
-      }
-
-      if (tagIds.length > 0) {
-        const gameTagsData = tagIds.map(tagId => ({
-          game_id: id,
-          tag_id: tagId,
-        }));
-
-        await supabase.from('game_tags').insert(gameTagsData);
       }
     }
-  }
 
-  return NextResponse.json(game);
+    return NextResponse.json(game);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 // DELETE /api/games/[id] - Delete a game
 export async function DELETE(request: Request, { params }: { params: Params }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const { auth, users, games } = await createRepositories();
 
   // Check authentication
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
+  const authUser = await auth.getUser();
+  if (!authUser) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   // Get user from our users table
-  const { data: dbUser } = await supabase
-    .from('users')
-    .select('id')
-    .eq('github_id', user.id)
-    .single();
-
+  const dbUser = await users.findByGithubId(authUser.id);
   if (!dbUser) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
   // Check if user owns this game
-  const { data: existingGame } = await supabase
-    .from('games')
-    .select('user_id')
-    .eq('id', id)
-    .single();
-
-  if (!existingGame) {
+  const ownerId = await games.getOwnerId(id);
+  if (!ownerId) {
     return NextResponse.json({ error: 'Game not found' }, { status: 404 });
   }
-
-  if (existingGame.user_id !== dbUser.id) {
+  if (ownerId !== dbUser.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  // Delete the game (cascade will handle game_tags and likes)
-  const { error } = await supabase
-    .from('games')
-    .delete()
-    .eq('id', id);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  try {
+    // Delete the game (cascade will handle game_tags and likes)
+    await games.delete(id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true });
 }
