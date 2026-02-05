@@ -11,11 +11,37 @@ npm start        # Start production server
 npm run lint     # Run ESLint (next/core-web-vitals + next/typescript)
 ```
 
+No test framework is configured. There are no test scripts or test files.
+
 Supabase setup: copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Run `supabase/migrations/001_initial_schema.sql` in Supabase dashboard or CLI.
 
 ## Architecture
 
-Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS. Japanese community platform for sharing creative game inventions ("ゲーム発明会").
+Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS. Japanese community platform for sharing creative game inventions ("ゲーム発明会"). All UI text is in Japanese.
+
+All source code lives under `src/`. The `@/` path alias resolves to `src/`.
+
+### Directory Structure
+
+- `src/app/(pages)/` — Frontend pages (Route Group, no URL impact). New pages go here.
+- `src/app/api/` — Backend API routes
+- `src/components/` — Shared UI components
+- `src/lib/db/` — Supabase SDK client setup (browser `client.ts`, server `server.ts`, `middleware.ts`)
+- `src/lib/repositories/` — Data access layer (interfaces + factory)
+- `src/lib/repositories/impl/` — Supabase-specific repository implementations
+- `src/types/` — TypeScript type definitions
+- `supabase/migrations/` — Database migration SQL (Supabase CLI convention, stays at project root)
+
+### Repository Pattern
+
+API routes use a repository pattern to decouple data access from Supabase:
+
+- **Interfaces**: `lib/repositories/interfaces.ts` — defines `IAuthRepository`, `IUserRepository`, `IGameRepository`, `ITagRepository`, `ILikeRepository`
+- **Implementations**: `lib/repositories/impl/` — one file per repository (auth, users, games, tags, likes)
+- **Factory**: `lib/repositories/index.ts` — `createRepositories()` creates all repository instances from a single server Supabase client
+- **Usage in API routes**: Each route handler calls `const { auth, users, games, ... } = await createRepositories()` at the top
+
+When adding new data access, add the method to the interface first, then implement it in the repository under `impl/`.
 
 ### Design System
 
@@ -28,8 +54,8 @@ Retro pixel-art / NES aesthetic. All UI uses this consistently:
 
 ### Backend (Supabase)
 
-- **Client**: `lib/supabase/client.ts` (browser), `lib/supabase/server.ts` (server-side with cookie management)
-- **Middleware**: `lib/supabase/middleware.ts` called from `middleware.ts` — refreshes auth session on every request
+- **Client**: `lib/db/client.ts` (browser), `lib/db/server.ts` (server-side with cookie management)
+- **Middleware**: `lib/db/middleware.ts` called from `src/middleware.ts` — refreshes auth session on every request. No code should be placed between client creation and `getUser()` call in the middleware.
 - **Types**: `types/database.ts` — auto-generated Supabase types, plus utility types (`User`, `Game`, `Tag`, `Like`, `GameWithDetails`)
 - **Schema**: `supabase/migrations/001_initial_schema.sql` — tables: `users`, `games`, `tags`, `game_tags`, `likes` with RLS policies and triggers
 
@@ -37,28 +63,28 @@ Retro pixel-art / NES aesthetic. All UI uses this consistently:
 
 GitHub OAuth via Supabase Auth:
 1. `Header.tsx` calls `supabase.auth.signInWithOAuth({ provider: 'github' })`
-2. Callback at `app/api/auth/callback/route.ts` exchanges code, creates/updates user record
-3. `middleware.ts` refreshes session on every request
+2. Callback at `app/api/auth/callback/route.ts` exchanges code, creates/updates user record in `users` table
+3. `src/middleware.ts` refreshes session on every request
 4. `submit/page.tsx` gates on auth — redirects to GitHub login if unauthenticated
+
+Auth-required API routes check `auth.getUser()` then look up the internal user via `users.findByGithubId()`. The Supabase Auth user ID maps to `users.github_id`.
 
 ### API Routes
 
-All under `app/api/`:
+All under `src/app/api/`:
 - `games/route.ts` — GET (list with search/tag filter), POST (create)
-- `games/[id]/route.ts` — GET, PUT, DELETE (single game)
+- `games/[id]/route.ts` — GET, PUT, DELETE (single game, ownership check on mutations)
 - `games/[id]/like/route.ts` — POST, DELETE (like/unlike)
 - `tags/route.ts` — GET (list with search)
 - `users/me/route.ts` — GET (current user)
-- `users/[id]/route.ts` — GET (user profile)
+- `users/[id]/route.ts` — GET (user profile with games_count, total_likes)
 - `users/[id]/games/route.ts` — GET (user's games)
-
-Auth-required routes check `supabase.auth.getUser()` and look up the user via `github_id`. RLS enforces row-level authorization.
 
 ### Current Integration State
 
 The API routes and database are fully implemented, but **frontend pages are not yet connected to the API**:
-- `games/page.tsx` uses a hardcoded `dummyGames` array instead of fetching from `/api/games`
-- `submit/page.tsx` logs form data to console instead of POSTing to `/api/games`
+- `(pages)/games/page.tsx` uses a hardcoded `dummyGames` array instead of fetching from `/api/games`
+- `(pages)/submit/page.tsx` logs form data to console instead of POSTing to `/api/games`
 - Home page stats are hardcoded
 - Image upload to Supabase Storage is not implemented
 - Like buttons and user profile pages are not built yet

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/db/server';
 import {
   IAuthRepository,
   IUserRepository,
@@ -12,7 +12,7 @@ import {
   SupabaseGameRepository,
   SupabaseTagRepository,
   SupabaseLikeRepository,
-} from './supabase';
+} from './impl';
 
 export type Repositories = {
   auth: IAuthRepository;

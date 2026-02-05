@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/db/client';
 import type { User } from '@supabase/supabase-js';
 
 export default function SubmitPage() {
