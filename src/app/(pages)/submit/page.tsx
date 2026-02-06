@@ -1,13 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import { createClient } from '@/lib/db/client';
 import type { User } from '@supabase/supabase-js';
+import type { Tag } from '@/types/database';
 
 export default function SubmitPage() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -15,18 +20,24 @@ export default function SubmitPage() {
     vercelUrl: '',
     githubUrl: '',
     qiitaUrl: '',
-    screenshot: null as File | null,
+    screenshotUrl: '',
     tags: [] as string[]
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
 
-  const availableTags = [
-    'React', 'Vue.js', 'Angular', 'Next.js', 'TypeScript',
-    'WebGL', 'Canvas', 'Three.js', 'Phaser',
-    '顔認識', 'Web Audio API', 'WebSocket', 'TensorFlow.js',
-    'Matter.js', 'Tailwind', 'Redux'
-  ];
+  const fetchTags = useCallback(async () => {
+    try {
+      const res = await fetch('/api/tags');
+      if (res.ok) {
+        const data = await res.json();
+        setAvailableTags(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch tags:', error);
+    }
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -34,7 +45,8 @@ export default function SubmitPage() {
       setUser(user);
       setAuthLoading(false);
     });
-  }, []);
+    fetchTags();
+  }, [fetchTags]);
 
   const handleLogin = async () => {
     const supabase = createClient();
@@ -55,12 +67,40 @@ export default function SubmitPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // ここで実際の投稿処理を行う
-    console.log('Submit:', formData);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    setError(null);
+    setSubmitting(true);
+
+    try {
+      const res = await fetch('/api/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          screenshot_url: formData.screenshotUrl,
+          vercel_url: formData.vercelUrl,
+          github_url: formData.githubUrl || null,
+          qiita_url: formData.qiitaUrl || null,
+          tags: formData.tags,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || '投稿に失敗しました');
+      }
+
+      setShowSuccess(true);
+      setTimeout(() => {
+        router.push('/games');
+      }, 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '投稿に失敗しました');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -181,27 +221,19 @@ export default function SubmitPage() {
                 />
               </FormField>
 
-              {/* Screenshot Upload */}
-              <FormField label="スクリーンショット" required>
-                <div className="border-4 border-dashed border-black bg-[#f8dcb4] p-8 text-center hover:bg-white transition-colors cursor-pointer">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setFormData(prev => ({ ...prev, screenshot: e.target.files?.[0] || null }))}
-                    className="hidden"
-                    id="screenshot-upload"
-                    required
-                  />
-                  <label htmlFor="screenshot-upload" className="cursor-pointer block w-full h-full">
-                    <div className="text-6xl mb-4">📸</div>
-                    <p className="text-xl text-[#331100] mb-2 font-bold">
-                      クリックして画像をアップロード
-                    </p>
-                    <p className="text-[#331100] text-sm opacity-75">
-                      {formData.screenshot ? formData.screenshot.name : 'PNG, JPG, GIF (最大5MB)'}
-                    </p>
-                  </label>
-                </div>
+              {/* Screenshot URL */}
+              <FormField label="スクリーンショットURL" required>
+                <input
+                  type="url"
+                  value={formData.screenshotUrl}
+                  onChange={(e) => setFormData(prev => ({ ...prev, screenshotUrl: e.target.value }))}
+                  placeholder="https://example.com/screenshot.png"
+                  className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
+                  required
+                />
+                <p className="mt-2 text-sm text-[#8b4513] font-bold">
+                  ※ゲームのスクリーンショット画像のURLを入力してください
+                </p>
               </FormField>
 
               {/* Tags */}
@@ -209,17 +241,17 @@ export default function SubmitPage() {
                 <div className="flex flex-wrap gap-3">
                   {availableTags.map(tag => (
                     <button
-                      key={tag}
+                      key={tag.id}
                       type="button"
-                      onClick={() => toggleTag(tag)}
+                      onClick={() => toggleTag(tag.name)}
                       className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
-                        formData.tags.includes(tag)
+                        formData.tags.includes(tag.name)
                           ? 'bg-[#e45c10] text-white translate-x-[2px] translate-y-[2px] shadow-none border-black'
                           : 'bg-white text-black hover:bg-gray-100 shadow-[4px_4px_0_#000] border-black'
                       }`}
                     >
-                      {formData.tags.includes(tag) && <span className="mr-2">✔️</span>}
-                      {tag}
+                      {formData.tags.includes(tag.name) && <span className="mr-2">✔️</span>}
+                      {tag.name}
                     </button>
                   ))}
                 </div>
@@ -230,13 +262,25 @@ export default function SubmitPage() {
                 )}
               </FormField>
 
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-100 border-4 border-red-500 p-4 text-red-700 font-bold">
+                  {error}
+                </div>
+              )}
+
               {/* Submit Button */}
               <div className="pt-8">
                 <button
                   type="submit"
-                  className="w-full pixel-button px-8 py-6 bg-[#e45c10] hover:bg-[#c7004c] text-white text-2xl font-bold tracking-wider transition-all transform hover:scale-105 shadow-[6px_6px_0_#000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0_#000] animate-pulse"
+                  disabled={submitting}
+                  className={`w-full pixel-button px-8 py-6 text-white text-2xl font-bold tracking-wider transition-all transform shadow-[6px_6px_0_#000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0_#000] ${
+                    submitting
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-[#e45c10] hover:bg-[#c7004c] hover:scale-105 animate-pulse'
+                  }`}
                 >
-                  投稿する！
+                  {submitting ? '投稿中...' : '投稿する！'}
                 </button>
               </div>
             </form>
