@@ -71,40 +71,54 @@ npm run lint     # Lint実行
 
 ```
 game-invention-club/
-├── app/
-│   ├── api/
-│   │   ├── auth/callback/route.ts      # GitHub OAuth コールバック
-│   │   ├── games/
-│   │   │   ├── route.ts                # GET/POST ゲーム一覧・作成
-│   │   │   └── [id]/
-│   │   │       ├── route.ts            # GET/PUT/DELETE ゲーム個別操作
-│   │   │       └── like/route.ts       # POST/DELETE いいね
-│   │   ├── tags/route.ts               # GET タグ一覧
-│   │   └── users/
-│   │       ├── me/route.ts             # GET ログインユーザー情報
-│   │       └── [id]/
-│   │           ├── route.ts            # GET ユーザープロフィール
-│   │           └── games/route.ts      # GET ユーザーのゲーム一覧
-│   ├── games/page.tsx                  # ゲーム一覧ページ
-│   ├── submit/page.tsx                 # 投稿フォームページ (ログインゲート付き)
-│   ├── page.tsx                        # ホーム画面
-│   ├── layout.tsx                      # ルートレイアウト
-│   └── globals.css                     # グローバルスタイル
-├── components/
-│   └── Header.tsx                      # 共通ヘッダー (ナビ + 認証UI)
-├── lib/supabase/
-│   ├── client.ts                       # ブラウザ用クライアント
-│   ├── server.ts                       # サーバー用クライアント
-│   └── middleware.ts                   # セッション管理
-├── types/
-│   └── database.ts                     # Supabase型定義
+├── src/
+│   ├── app/
+│   │   ├── (pages)/                        # Route Group (URLに影響なし)
+│   │   │   ├── games/page.tsx              # ゲーム一覧ページ
+│   │   │   └── submit/page.tsx             # 投稿フォームページ (ログインゲート付き)
+│   │   ├── api/
+│   │   │   ├── auth/callback/route.ts      # GitHub OAuth コールバック
+│   │   │   ├── games/
+│   │   │   │   ├── route.ts                # GET/POST ゲーム一覧・作成
+│   │   │   │   └── [id]/
+│   │   │   │       ├── route.ts            # GET/PUT/DELETE ゲーム個別操作
+│   │   │   │       └── like/route.ts       # POST/DELETE いいね
+│   │   │   ├── tags/route.ts               # GET タグ一覧
+│   │   │   └── users/
+│   │   │       ├── me/route.ts             # GET ログインユーザー情報
+│   │   │       └── [id]/
+│   │   │           ├── route.ts            # GET ユーザープロフィール
+│   │   │           └── games/route.ts      # GET ユーザーのゲーム一覧
+│   │   ├── page.tsx                        # ホーム画面
+│   │   ├── layout.tsx                      # ルートレイアウト
+│   │   └── globals.css                     # グローバルスタイル
+│   ├── components/
+│   │   └── Header.tsx                      # 共通ヘッダー (ナビ + 認証UI)
+│   ├── lib/
+│   │   ├── db/
+│   │   │   ├── client.ts                   # ブラウザ用Supabaseクライアント
+│   │   │   ├── server.ts                   # サーバー用Supabaseクライアント
+│   │   │   └── middleware.ts               # セッション管理
+│   │   └── repositories/
+│   │       ├── index.ts                    # ファクトリ関数 (createRepositories)
+│   │       ├── interfaces.ts               # リポジトリインターフェース定義
+│   │       └── impl/                       # Supabase固有の実装
+│   │           ├── auth.ts                 # IAuthRepository実装
+│   │           ├── users.ts                # IUserRepository実装
+│   │           ├── games.ts                # IGameRepository実装
+│   │           ├── tags.ts                 # ITagRepository実装
+│   │           └── likes.ts                # ILikeRepository実装
+│   ├── types/
+│   │   └── database.ts                     # Supabase型定義
+│   └── middleware.ts                       # Next.jsミドルウェア
 ├── supabase/migrations/
-│   └── 001_initial_schema.sql          # DBスキーマ
-├── middleware.ts                        # Next.jsミドルウェア
+│   └── 001_initial_schema.sql              # DBスキーマ
 ├── tailwind.config.ts
 ├── tsconfig.json
 └── next.config.ts
 ```
+
+`@/` パスエイリアスは `src/` を指します。
 
 ## データベース構成
 
@@ -117,6 +131,22 @@ game-invention-club/
 | `likes` | いいね (ユーザー×ゲームでユニーク) |
 
 RLS (Row Level Security) により、ゲームの編集・削除は投稿者のみに制限される。
+
+## リポジトリパターン
+
+APIルートはリポジトリパターンを採用し、データアクセスをSupabaseから分離している。
+
+- **インターフェース** (`lib/repositories/interfaces.ts`): `IAuthRepository`, `IUserRepository`, `IGameRepository`, `ITagRepository`, `ILikeRepository`
+- **実装** (`lib/repositories/impl/`): 各リポジトリのSupabase固有実装
+- **ファクトリ** (`lib/repositories/index.ts`): `createRepositories()` で全リポジトリを生成
+
+APIルートでの使用例:
+```typescript
+const { auth, users, games } = await createRepositories();
+const { user } = await auth.getUser();
+```
+
+新しいデータアクセスを追加する場合は、まずインターフェースにメソッドを追加し、その後 `impl/` で実装する。
 
 ## 機能と進捗
 
