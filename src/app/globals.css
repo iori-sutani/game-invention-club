@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Remove @import and use CSS variables from next/font */
-}
-
 body {
   /* Fallback to CSS variables */
   font-family: var(--font-press-start), var(--font-dot-gothic), cursive;
