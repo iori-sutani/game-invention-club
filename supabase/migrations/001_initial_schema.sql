@@ -23,24 +23,13 @@ CREATE TABLE tags (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Insert default tags
-INSERT INTO tags (name, usage_count) VALUES
-  ('React', 0),
-  ('Vue.js', 0),
-  ('Angular', 0),
-  ('Next.js', 0),
-  ('TypeScript', 0),
-  ('WebGL', 0),
-  ('Canvas', 0),
-  ('Three.js', 0),
-  ('Phaser', 0),
-  ('顔認識', 0),
-  ('Web Audio API', 0),
-  ('WebSocket', 0),
-  ('TensorFlow.js', 0),
-  ('Matter.js', 0),
-  ('Tailwind', 0),
-  ('Redux', 0);
+-- Default tags removed - users can now add tags dynamically
+-- To add default tags, uncomment below:
+-- INSERT INTO tags (name, usage_count) VALUES
+--   ('React', 0),
+--   ('Vue.js', 0),
+--   ('Next.js', 0),
+--   ('TypeScript', 0);
 
 -- =============================================
 -- Games table

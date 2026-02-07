@@ -33,6 +33,9 @@ export default function SubmitPage() {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [newTagInput, setNewTagInput] = useState('');
+  const [addingTag, setAddingTag] = useState(false);
+
   const fetchTags = useCallback(async () => {
     try {
       const res = await fetch('/api/tags');
@@ -71,6 +74,50 @@ export default function SubmitPage() {
         ? prev.tags.filter(t => t !== tag)
         : [...prev.tags, tag]
     }));
+  };
+
+  const addNewTag = async () => {
+    const tagName = newTagInput.trim();
+    if (!tagName) return;
+
+    // Check if already in available tags
+    if (availableTags.some(t => t.name.toLowerCase() === tagName.toLowerCase())) {
+      // Just select it
+      if (!formData.tags.includes(tagName)) {
+        toggleTag(tagName);
+      }
+      setNewTagInput('');
+      return;
+    }
+
+    setAddingTag(true);
+    try {
+      const res = await fetch('/api/tags', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: tagName }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        // Add to available tags if new
+        if (!data.exists) {
+          setAvailableTags(prev => [...prev, { id: data.id, name: data.name, usage_count: 0, created_at: new Date().toISOString() }]);
+        }
+        // Select the tag
+        if (!formData.tags.includes(data.name)) {
+          setFormData(prev => ({ ...prev, tags: [...prev.tags, data.name] }));
+        }
+        setNewTagInput('');
+      } else {
+        const data = await res.json();
+        setError(data.error || 'タグの追加に失敗しました');
+      }
+    } catch {
+      setError('タグの追加に失敗しました');
+    } finally {
+      setAddingTag(false);
+    }
   };
 
   const handleFileSelect = (file: File) => {
@@ -364,23 +411,65 @@ export default function SubmitPage() {
 
               {/* Tags */}
               <FormField label="技術タグ (複数選択可)">
-                <div className="flex flex-wrap gap-3">
-                  {availableTags.map(tag => (
-                    <button
-                      key={tag.id}
-                      type="button"
-                      onClick={() => toggleTag(tag.name)}
-                      className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
-                        formData.tags.includes(tag.name)
-                          ? 'bg-[#e45c10] text-white translate-x-[2px] translate-y-[2px] shadow-none border-black'
-                          : 'bg-white text-black hover:bg-gray-100 shadow-[4px_4px_0_#000] border-black'
-                      }`}
-                    >
-                      {formData.tags.includes(tag.name) && <span className="mr-2">✔️</span>}
-                      {tag.name}
-                    </button>
-                  ))}
+                {/* Add new tag input */}
+                <div className="flex gap-2 mb-4">
+                  <input
+                    type="text"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addNewTag();
+                      }
+                    }}
+                    placeholder="新しいタグを追加..."
+                    className="flex-1 px-4 py-3 bg-white border-4 border-black text-[#331100] focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_2px_2px_0_#ccc]"
+                    disabled={addingTag}
+                  />
+                  <button
+                    type="button"
+                    onClick={addNewTag}
+                    disabled={addingTag || !newTagInput.trim()}
+                    className={`pixel-button px-6 py-3 font-bold border-4 border-black transition-all ${
+                      addingTag || !newTagInput.trim()
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-[#fbad08] text-black hover:bg-[#e45c10] hover:text-white shadow-[4px_4px_0_#000]'
+                    }`}
+                  >
+                    {addingTag ? '...' : '追加'}
+                  </button>
                 </div>
+
+                {/* Existing tags */}
+                {availableTags.length > 0 && (
+                  <div className="flex flex-wrap gap-3">
+                    {availableTags.map(tag => {
+                      const isSelected = formData.tags.includes(tag.name);
+                      return (
+                        <button
+                          key={tag.id}
+                          type="button"
+                          onClick={() => toggleTag(tag.name)}
+                          className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
+                            isSelected
+                              ? '!bg-[#e45c10] !text-white translate-x-[2px] translate-y-[2px] !shadow-none !border-black'
+                              : '!bg-white !text-black hover:!bg-gray-100 shadow-[4px_4px_0_#000] !border-black'
+                          }`}
+                        >
+                          {tag.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {availableTags.length === 0 && (
+                  <p className="text-[#8b4513] text-sm">
+                    まだタグがありません。上の入力欄から新しいタグを追加してください。
+                  </p>
+                )}
+
                 {formData.tags.length > 0 && (
                   <div className="mt-4 text-[#331100] text-sm font-bold">
                     選択中: {formData.tags.join(', ')}
@@ -418,7 +507,7 @@ export default function SubmitPage() {
               <ul className="space-y-4 text-[#331100] list-disc list-inside">
                 <li>既存ゲームのコピーではなく、独自の工夫があること</li>
                 <li>遊ぶ際にアカウント作成やログインを求めないこと（誰でもすぐに遊べるようにしてください）</li>
-                <li>GitHubでソースコードを公開すること</li>
+                <li>可能ならGitHubでソースコードを公開すること</li>
                 <li>技術的な解説があると他の開発者の学びになります</li>
                 <li>楽しく、クリエイティブな作品をお待ちしています!</li>
               </ul>
