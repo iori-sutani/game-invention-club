@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import { createClient } from '@/lib/db/client';
@@ -26,6 +26,12 @@ export default function SubmitPage() {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchTags = useCallback(async () => {
     try {
@@ -67,19 +73,92 @@ export default function SubmitPage() {
     }));
   };
 
+  const handleFileSelect = (file: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('対応形式: JPEG, PNG, GIF, WebP');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError('ファイルサイズは5MB以下にしてください');
+      return;
+    }
+    setError(null);
+    setScreenshotFile(file);
+    const reader = new FileReader();
+    reader.onload = (e) => setScreenshotPreview(e.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleFileSelect(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const uploadScreenshot = async (): Promise<string | null> => {
+    if (!screenshotFile) return formData.screenshotUrl || null;
+
+    setUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', screenshotFile);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'アップロードに失敗しました');
+      }
+
+      const { url } = await res.json();
+      return url;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
 
     try {
+      // Upload screenshot first if file is selected
+      let screenshotUrl = formData.screenshotUrl;
+      if (screenshotFile) {
+        const uploadedUrl = await uploadScreenshot();
+        if (!uploadedUrl) {
+          throw new Error('スクリーンショットのアップロードに失敗しました');
+        }
+        screenshotUrl = uploadedUrl;
+      }
+
+      if (!screenshotUrl) {
+        throw new Error('スクリーンショットは必須です');
+      }
+
       const res = await fetch('/api/games', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: formData.title,
           description: formData.description,
-          screenshot_url: formData.screenshotUrl,
+          screenshot_url: screenshotUrl,
           vercel_url: formData.vercelUrl,
           github_url: formData.githubUrl || null,
           qiita_url: formData.qiitaUrl || null,
@@ -221,19 +300,66 @@ export default function SubmitPage() {
                 />
               </FormField>
 
-              {/* Screenshot URL */}
-              <FormField label="スクリーンショットURL" required>
-                <input
-                  type="url"
-                  value={formData.screenshotUrl}
-                  onChange={(e) => setFormData(prev => ({ ...prev, screenshotUrl: e.target.value }))}
-                  placeholder="https://example.com/screenshot.png"
-                  className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[inset_4px_4px_0_#ccc]"
-                  required
-                />
-                <p className="mt-2 text-sm text-[#8b4513] font-bold">
-                  ※ゲームのスクリーンショット画像のURLを入力してください
-                </p>
+              {/* Screenshot Upload */}
+              <FormField label="スクリーンショット" required>
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  className={`relative cursor-pointer border-4 border-dashed transition-all ${
+                    isDragging
+                      ? 'border-[#e45c10] bg-orange-50'
+                      : 'border-black bg-white hover:border-[#8b4513]'
+                  } ${screenshotPreview ? 'p-2' : 'p-8'}`}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileSelect(file);
+                    }}
+                    className="hidden"
+                  />
+                  {screenshotPreview ? (
+                    <div className="relative">
+                      <img
+                        src={screenshotPreview}
+                        alt="Preview"
+                        className="w-full max-h-64 object-contain"
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setScreenshotFile(null);
+                          setScreenshotPreview(null);
+                          if (fileInputRef.current) fileInputRef.current.value = '';
+                        }}
+                        className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white border-2 border-black font-bold hover:bg-red-600"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-5xl mb-4 pixelated">📷</div>
+                      <p className="text-lg text-[#331100] font-bold mb-2">
+                        クリックまたはドラッグ&ドロップ
+                      </p>
+                      <p className="text-sm text-[#8b4513]">
+                        JPEG, PNG, GIF, WebP (最大5MB)
+                      </p>
+                    </div>
+                  )}
+                  {uploading && (
+                    <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center">
+                      <div className="text-2xl pixelated animate-pulse">アップロード中...</div>
+                    </div>
+                  )}
+                </div>
               </FormField>
 
               {/* Tags */}

@@ -76,15 +76,26 @@ All under `src/app/api/`:
 - `games/[id]/route.ts` — GET, PUT, DELETE (single game, ownership check on mutations)
 - `games/[id]/like/route.ts` — POST, DELETE (like/unlike)
 - `tags/route.ts` — GET (list with search)
+- `stats/route.ts` — GET (games_count, users_count, tags_count)
+- `upload/route.ts` — POST (upload image to Supabase Storage, returns public URL)
 - `users/me/route.ts` — GET (current user)
 - `users/[id]/route.ts` — GET (user profile with games_count, total_likes)
 - `users/[id]/games/route.ts` — GET (user's games)
 
 ### Current Integration State
 
-The API routes and database are fully implemented, but **frontend pages are not yet connected to the API**:
-- `(pages)/games/page.tsx` uses a hardcoded `dummyGames` array instead of fetching from `/api/games`
-- `(pages)/submit/page.tsx` logs form data to console instead of POSTing to `/api/games`
-- Home page stats are hardcoded
-- Image upload to Supabase Storage is not implemented
-- Like buttons and user profile pages are not built yet
+Frontend pages are connected to the API:
+- `(pages)/page.tsx` — fetches stats from `/api/stats`
+- `(pages)/games/page.tsx` — fetches games/tags from `/api/games` and `/api/tags`
+- `(pages)/submit/page.tsx` — POSTs to `/api/games`, uploads screenshots via `/api/upload`
+
+Not yet implemented:
+- Like buttons on game cards
+- User profile pages
+
+### Supabase Storage Setup
+
+Before using image upload, create a Storage bucket in Supabase Dashboard:
+1. Go to Storage → Create bucket
+2. Name: `screenshots`, Public: Yes
+3. Add RLS policies (see `supabase/migrations/002_storage_bucket.sql` for details)
