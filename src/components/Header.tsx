@@ -9,6 +9,7 @@ import type { User } from '@supabase/supabase-js';
 export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+  const [internalUserId, setInternalUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const isGamesActive = pathname === '/games';
@@ -20,11 +21,25 @@ export default function Header() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       setLoading(false);
+
+      if (user) {
+        fetch('/api/users/me')
+          .then(res => res.ok ? res.json() : null)
+          .then(data => {
+            if (data?.id) {
+              setInternalUserId(data.id);
+            }
+          })
+          .catch(() => {});
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
+        if (!session?.user) {
+          setInternalUserId(null);
+        }
       }
     );
 
@@ -91,15 +106,20 @@ export default function Header() {
             <div className="w-[80px] md:w-[120px] h-[40px] bg-[#5e300d] border-4 border-black animate-pulse" />
           ) : user ? (
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-10 h-10 border-4 border-black overflow-hidden shadow-[2px_2px_0_#000] bg-[#fbad08]">
-                {avatarUrl && (
+              <Link
+                href={internalUserId ? `/users/${internalUserId}` : '#'}
+                className="pixel-button flex items-center justify-center w-[44px] h-[44px] md:w-[54px] md:h-[54px] !p-0 border-4 border-black overflow-hidden shadow-[4px_4px_0_#000] bg-[#fbad08] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_#000] transition-all"
+              >
+                {avatarUrl ? (
                   <img
                     src={avatarUrl}
                     alt={username}
                     className="w-full h-full object-cover"
                   />
+                ) : (
+                  <span className="text-lg md:text-xl pixelated">👤</span>
                 )}
-              </div>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#5e300d] text-white hover:bg-[#8b4513] shadow-[4px_4px_0_#000]"

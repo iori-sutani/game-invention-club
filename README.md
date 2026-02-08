@@ -75,7 +75,8 @@ game-invention-club/
 │   ├── app/
 │   │   ├── (pages)/                        # Route Group (URLに影響なし)
 │   │   │   ├── games/page.tsx              # ゲーム一覧ページ
-│   │   │   └── submit/page.tsx             # 投稿フォームページ (ログインゲート付き)
+│   │   │   ├── submit/page.tsx             # 投稿フォームページ (ログインゲート付き)
+│   │   │   └── users/[id]/page.tsx         # ユーザープロフィールページ
 │   │   ├── api/
 │   │   │   ├── auth/callback/route.ts      # GitHub OAuth コールバック
 │   │   │   ├── games/
@@ -93,7 +94,8 @@ game-invention-club/
 │   │   ├── layout.tsx                      # ルートレイアウト
 │   │   └── globals.css                     # グローバルスタイル
 │   ├── components/
-│   │   └── Header.tsx                      # 共通ヘッダー (ナビ + 認証UI)
+│   │   ├── Header.tsx                      # 共通ヘッダー (ナビ + 認証UI)
+│   │   └── GameCard.tsx                    # ゲームカード (いいねボタン付き)
 │   ├── lib/
 │   │   ├── db/
 │   │   │   ├── client.ts                   # ブラウザ用Supabaseクライアント
@@ -122,13 +124,13 @@ game-invention-club/
 
 ## データベース構成
 
-| テーブル | 説明 |
-|---------|------|
-| `users` | ユーザー情報 (GitHub連携) |
-| `games` | 投稿されたゲーム |
-| `tags` | タグマスタ (usage_countトリガー付き) |
-| `game_tags` | ゲームとタグの中間テーブル |
-| `likes` | いいね (ユーザー×ゲームでユニーク) |
+| テーブル    | 説明                                 |
+| ----------- | ------------------------------------ |
+| `users`     | ユーザー情報 (GitHub連携)            |
+| `games`     | 投稿されたゲーム                     |
+| `tags`      | タグマスタ (usage_countトリガー付き) |
+| `game_tags` | ゲームとタグの中間テーブル           |
+| `likes`     | いいね (ユーザー×ゲームでユニーク)   |
 
 RLS (Row Level Security) により、ゲームの編集・削除は投稿者のみに制限される。
 
@@ -141,6 +143,7 @@ APIルートはリポジトリパターンを採用し、データアクセス�
 - **ファクトリ** (`lib/repositories/index.ts`): `createRepositories()` で全リポジトリを生成
 
 APIルートでの使用例:
+
 ```typescript
 const { auth, users, games } = await createRepositories();
 const { user } = await auth.getUser();
@@ -159,8 +162,8 @@ const { user } = await auth.getUser();
 - [x] 共通ヘッダーコンポーネント
 - [x] ログイン/ログアウトUI (GitHub OAuth)
 - [x] 投稿ページのログインゲート
-- [ ] いいねボタン
-- [ ] ユーザープロフィールページ
+- [x] いいねボタン
+- [x] ユーザープロフィールページ
 
 ### バックエンド (API)
 
@@ -172,11 +175,8 @@ const { user } = await auth.getUser();
 - [x] DBスキーマ・マイグレーション
 - [x] RLS (Row Level Security)
 
-### 未接続・未実装
+### 未実装
 
-- [ ] フロントエンドからAPIへの接続 (現在ダミーデータ使用)
-- [ ] スクリーンショットのアップロード (Supabase Storage)
-- [ ] ホーム画面の統計情報を実データ化
 - [ ] コメント機能
 - [ ] コンテスト機能
 

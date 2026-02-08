@@ -13,7 +13,7 @@ npm run lint     # Run ESLint (next/core-web-vitals + next/typescript)
 
 No test framework is configured. There are no test scripts or test files.
 
-Supabase setup: copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Run `supabase/migrations/001_initial_schema.sql` in Supabase dashboard or CLI.
+Supabase setup: copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Run all migration files in `supabase/migrations/` in order (001 → 004) via Supabase dashboard SQL Editor or CLI.
 
 ## Architecture
 
@@ -57,7 +57,11 @@ Retro pixel-art / NES aesthetic. All UI uses this consistently:
 - **Client**: `lib/db/client.ts` (browser), `lib/db/server.ts` (server-side with cookie management)
 - **Middleware**: `lib/db/middleware.ts` called from `src/middleware.ts` — refreshes auth session on every request. No code should be placed between client creation and `getUser()` call in the middleware.
 - **Types**: `types/database.ts` — auto-generated Supabase types, plus utility types (`User`, `Game`, `Tag`, `Like`, `GameWithDetails`)
-- **Schema**: `supabase/migrations/001_initial_schema.sql` — tables: `users`, `games`, `tags`, `game_tags`, `likes` with RLS policies and triggers
+- **Schema**: `supabase/migrations/` — run in order:
+  - `001_initial_schema.sql`: tables (`users`, `games`, `tags`, `game_tags`, `likes`), RLS policies, triggers
+  - `002_storage_bucket.sql`: Storage bucket policies for `screenshots`
+  - `003_users_insert_policy.sql`: Additional RLS for user creation
+  - `004_remove_default_tags.sql`: Cleanup migration
 
 ### Auth Flow
 
@@ -86,12 +90,17 @@ All under `src/app/api/`:
 
 Frontend pages are connected to the API:
 - `(pages)/page.tsx` — fetches stats from `/api/stats`
-- `(pages)/games/page.tsx` — fetches games/tags from `/api/games` and `/api/tags`
+- `(pages)/games/page.tsx` — fetches games/tags from `/api/games` and `/api/tags`, uses `GameCard` component
 - `(pages)/submit/page.tsx` — POSTs to `/api/games`, uploads screenshots via `/api/upload`
+- `(pages)/users/[id]/page.tsx` — fetches user profile from `/api/users/[id]` and user's games from `/api/users/[id]/games`
+
+Shared components:
+- `components/Header.tsx` — navigation, auth UI, avatar links to user profile
+- `components/GameCard.tsx` — game card with like button, author links to user profile
 
 Not yet implemented:
-- Like buttons on game cards
-- User profile pages
+- Comment functionality
+- Contest functionality
 
 ### Supabase Storage Setup
 
