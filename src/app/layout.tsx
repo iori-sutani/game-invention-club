@@ -15,7 +15,7 @@ const pressStart = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "ゲーム発明会 - 新しいゲームを発明しよう",
+  title: "ゲーム発明会",
   description: "既存のゲームに＋１の工夫を加えた独創的なゲームを作って共有するコミュニティ",
 };
 
