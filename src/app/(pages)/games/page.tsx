@@ -58,7 +58,7 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="min-h-screen font-pixel text-[#331100]">
+    <div className="font-pixel text-[#331100]">
 
       <Header />
 

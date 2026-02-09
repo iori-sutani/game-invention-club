@@ -21,7 +21,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen font-pixel text-[#331100]">
+    <div className="font-pixel text-[#331100]">
       <Header />
 
       {/* Hero Section */}
@@ -89,14 +89,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#8b4513] border-t-4 border-black py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-white text-sm font-pixel drop-shadow-[2px_2px_0_#000]">
-            © 2025 ゲーム発明会 - GAME INVENTION CLUB
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

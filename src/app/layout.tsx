@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { DotGothic16, Press_Start_2P } from "next/font/google"; // Import fonts
+import { DotGothic16, Press_Start_2P } from "next/font/google";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const dotGothic = DotGothic16({
@@ -41,7 +42,11 @@ export default function RootLayout({
         {/* 背景テクスチャ (全体に適用、最背面) */}
         <div className="fixed inset-0 z-[-1] pixel-pattern-bg"></div>
         <div className="fixed inset-0 z-[-1] scanlines-bg pointer-events-none"></div>
-        {children}
+
+        <div className="min-h-screen flex flex-col">
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </div>
       </body>
     </html>
   );

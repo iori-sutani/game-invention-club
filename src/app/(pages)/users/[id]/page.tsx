@@ -70,7 +70,7 @@ export default function UserProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen font-pixel text-[#331100]">
+      <div className="font-pixel text-[#331100]">
         <Header />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-20">
@@ -84,7 +84,7 @@ export default function UserProfilePage() {
 
   if (error || !user) {
     return (
-      <div className="min-h-screen font-pixel text-[#331100]">
+      <div className="font-pixel text-[#331100]">
         <Header />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-20">
@@ -97,7 +97,7 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div className="min-h-screen font-pixel text-[#331100]">
+    <div className="font-pixel text-[#331100]">
       <Header />
 
       <div className="container mx-auto px-4 py-12">

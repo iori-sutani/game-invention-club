@@ -23,7 +23,7 @@ All source code lives under `src/`. The `@/` path alias resolves to `src/`.
 
 ### Directory Structure
 
-- `src/app/(pages)/` — Frontend pages (Route Group, no URL impact). New pages go here.
+- `src/app/(pages)/` — Frontend pages (Route Group, no URL impact). New pages go here. Home page is `page.tsx` in this directory.
 - `src/app/api/` — Backend API routes
 - `src/components/` — Shared UI components
 - `src/lib/db/` — Supabase SDK client setup (browser `client.ts`, server `server.ts`, `middleware.ts`)
@@ -81,7 +81,7 @@ All under `src/app/api/`:
 - `games/[id]/like/route.ts` — POST, DELETE (like/unlike)
 - `tags/route.ts` — GET (list with search)
 - `stats/route.ts` — GET (games_count, users_count, tags_count)
-- `upload/route.ts` — POST (upload image to Supabase Storage, returns public URL)
+- `upload/route.ts` — POST (upload image to Supabase Storage, max 5MB, jpeg/png/gif/webp only, returns public URL)
 - `users/me/route.ts` — GET (current user)
 - `users/[id]/route.ts` — GET (user profile with games_count, total_likes)
 - `users/[id]/games/route.ts` — GET (user's games)

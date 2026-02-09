@@ -230,7 +230,7 @@ export default function SubmitPage() {
   };
 
   return (
-    <div className="min-h-screen font-pixel text-[#331100]">
+    <div className="font-pixel text-[#331100]">
 
       {/* Success Message */}
       {showSuccess && (
