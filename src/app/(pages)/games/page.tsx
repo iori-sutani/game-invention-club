@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Header from '@/components/Header';
-import GameCard from '@/components/GameCard';
+import { Header } from '@/components/Header';
+import { GameCard } from '@/components/GameCard';
 import type { GameWithDetails, Tag } from '@/types/database';
 
 export default function GamesPage() {

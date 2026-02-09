@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/db/client';
 import type { User } from '@supabase/supabase-js';
 
-export default function Header() {
+export function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [internalUserId, setInternalUserId] = useState<string | null>(null);

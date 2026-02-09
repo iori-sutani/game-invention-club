@@ -8,7 +8,7 @@ interface GameCardProps {
   game: GameWithDetails;
 }
 
-export default function GameCard({ game }: GameCardProps) {
+export function GameCard({ game }: GameCardProps) {
   const [isLiked, setIsLiked] = useState(game.is_liked ?? false);
   const [likesCount, setLikesCount] = useState(game.likes_count);
   const [isLoading, setIsLoading] = useState(false);

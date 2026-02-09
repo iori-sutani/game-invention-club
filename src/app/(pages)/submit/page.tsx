@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/Header';
+import { Header } from '@/components/Header';
 import { createClient } from '@/lib/db/client';
 import type { User } from '@supabase/supabase-js';
 import type { Tag } from '@/types/database';

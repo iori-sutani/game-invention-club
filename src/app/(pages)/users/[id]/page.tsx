@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import Header from '@/components/Header';
-import GameCard from '@/components/GameCard';
+import { Header } from '@/components/Header';
+import { GameCard } from '@/components/GameCard';
 import type { GameWithDetails, User } from '@/types/database';
 
 interface UserProfile extends User {

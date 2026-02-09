@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
-import Footer from "@/components/Footer";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 const dotGothic = DotGothic16({
