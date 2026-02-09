@@ -1,24 +1,7 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 
-type Stats = {
-  games_count: number;
-  users_count: number;
-  tags_count: number;
-};
-
 export default function Home() {
-  const [stats, setStats] = useState<Stats | null>(null);
-
-  useEffect(() => {
-    fetch('/api/stats')
-      .then(res => res.json())
-      .then(data => setStats(data))
-      .catch(err => console.error('Failed to fetch stats:', err));
-  }, []);
 
   return (
     <div className="font-pixel text-[#331100]">
@@ -78,37 +61,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="border-y-4 border-black bg-[#e45c10] py-16 relative">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <StatCard number={stats?.games_count ?? '-'} label="投稿作品" />
-            <StatCard number={stats?.users_count ?? '-'} label="開発者" />
-            <StatCard number={stats?.tags_count ?? '-'} label="技術タグ" />
-          </div>
-        </div>
-      </section>
-
     </div>
   );
 }
+
 function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
   return (
     <div className="nes-container h-full transition-transform hover:-translate-y-2 hover:rotate-1">
       <div className="text-5xl mb-4 text-center pixelated">{icon}</div>
       <h3 className="text-2xl font-bold mb-3 text-center border-b-4 border-black pb-2 text-[#8b4513]">{title}</h3>
       <p className="leading-relaxed mt-4 text-[#331100]">{description}</p>
-    </div>
-  );
-}
-
-function StatCard({ number, label }: { number: string | number; label: string }) {
-  return (
-    <div className="bg-[#c46237] border-4 border-black p-8 shadow-[4px_4px_0_rgba(0,0,0,0.5)]">
-      <div className="text-5xl font-bold text-white mb-2 drop-shadow-[4px_4px_0_#000]">
-        {number}
-      </div>
-      <div className="text-[#fbad08] text-xl font-bold drop-shadow-[2px_2px_0_#000]">{label}</div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { Footer } from "@/components/Footer";
+import { StatsSection } from "@/components/StatsSection";
 import "./globals.css";
 
 const dotGothic = DotGothic16({
@@ -45,6 +46,7 @@ export default function RootLayout({
 
         <div className="min-h-screen flex flex-col">
           <div className="flex-1">{children}</div>
+          <StatsSection />
           <Footer />
         </div>
       </body>
