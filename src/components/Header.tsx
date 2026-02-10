@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/db/client';
@@ -111,10 +112,11 @@ export function Header() {
                 className="pixel-button flex items-center justify-center w-[44px] h-[44px] md:w-[54px] md:h-[54px] !p-0 border-4 border-black overflow-hidden shadow-[4px_4px_0_#000] bg-[#fbad08] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_#000] transition-all"
               >
                 {avatarUrl ? (
-                  <img
+                  <Image
                     src={avatarUrl}
                     alt={username}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 ) : (
                   <span className="text-lg md:text-xl pixelated">👤</span>

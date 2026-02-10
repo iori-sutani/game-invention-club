@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { GameWithDetails } from '@/types/database';
 
 interface GameCardProps {
@@ -59,10 +60,11 @@ export function GameCard({ game }: GameCardProps) {
           {/* Scanline decoration for cards */}
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)' }}></div>
           {game.screenshot_url ? (
-            <img
+            <Image
               src={game.screenshot_url}
               alt={game.title}
-              className="w-full h-full object-cover relative z-10"
+              fill
+              className="object-cover relative z-10"
             />
           ) : (
             <span className="text-8xl relative z-10 drop-shadow-md pixelated">🎮</span>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Header } from '@/components/Header';
 import { createClient } from '@/lib/db/client';
 import type { User } from '@supabase/supabase-js';
@@ -372,10 +373,13 @@ export default function SubmitPage() {
                   />
                   {screenshotPreview ? (
                     <div className="relative">
-                      <img
+                      <Image
                         src={screenshotPreview}
                         alt="Preview"
+                        width={640}
+                        height={360}
                         className="w-full max-h-64 object-contain"
+                        unoptimized
                       />
                       <button
                         type="button"

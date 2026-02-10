@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import { Header } from '@/components/Header';
 import { GameCard } from '@/components/GameCard';
 import type { GameWithDetails, User } from '@/types/database';
@@ -108,9 +109,11 @@ export default function UserProfilePage() {
             {/* Avatar */}
             <div className="w-32 h-32 border-4 border-black overflow-hidden bg-[#f8dcb4] flex items-center justify-center">
               {user.avatar_url ? (
-                <img
+                <Image
                   src={user.avatar_url}
                   alt={user.username}
+                  width={128}
+                  height={128}
                   className="w-full h-full object-cover"
                 />
               ) : (
