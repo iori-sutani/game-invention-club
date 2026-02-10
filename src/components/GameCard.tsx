@@ -64,6 +64,7 @@ export function GameCard({ game }: GameCardProps) {
               src={game.screenshot_url}
               alt={game.title}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover relative z-10"
             />
           ) : (

@@ -89,14 +89,16 @@ All under `src/app/api/`:
 ### Current Integration State
 
 Frontend pages are connected to the API:
-- `(pages)/page.tsx` — fetches stats from `/api/stats`
+- `(pages)/page.tsx` — home page, uses `StatsSection` component
 - `(pages)/games/page.tsx` — fetches games/tags from `/api/games` and `/api/tags`, uses `GameCard` component
 - `(pages)/submit/page.tsx` — POSTs to `/api/games`, uploads screenshots via `/api/upload`
 - `(pages)/users/[id]/page.tsx` — fetches user profile from `/api/users/[id]` and user's games from `/api/users/[id]/games`
 
 Shared components:
 - `components/Header.tsx` — navigation, auth UI, avatar links to user profile
+- `components/Footer.tsx` — site footer, included in root layout
 - `components/GameCard.tsx` — game card with like button, author links to user profile
+- `components/StatsSection.tsx` — stats display (games/users/tags counts), fetches from `/api/stats`
 
 Not yet implemented:
 - Comment functionality
