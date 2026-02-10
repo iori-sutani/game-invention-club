@@ -55,7 +55,7 @@ Retro pixel-art / NES aesthetic. All UI uses this consistently:
 ### Backend (Supabase)
 
 - **Client**: `lib/db/client.ts` (browser), `lib/db/server.ts` (server-side with cookie management)
-- **Middleware**: `lib/db/middleware.ts` called from `src/middleware.ts` — refreshes auth session on every request. No code should be placed between client creation and `getUser()` call in the middleware.
+- **Proxy**: `lib/db/middleware.ts` called from `src/proxy.ts` — refreshes auth session on every request. No code should be placed between client creation and `getUser()` call in the proxy.
 - **Types**: `types/database.ts` — auto-generated Supabase types, plus utility types (`User`, `Game`, `Tag`, `Like`, `GameWithDetails`)
 - **Schema**: `supabase/migrations/` — run in order:
   - `001_initial_schema.sql`: tables (`users`, `games`, `tags`, `game_tags`, `likes`), RLS policies, triggers
@@ -68,7 +68,7 @@ Retro pixel-art / NES aesthetic. All UI uses this consistently:
 GitHub OAuth via Supabase Auth:
 1. `Header.tsx` calls `supabase.auth.signInWithOAuth({ provider: 'github' })`
 2. Callback at `app/api/auth/callback/route.ts` exchanges code, creates/updates user record in `users` table
-3. `src/middleware.ts` refreshes session on every request
+3. `src/proxy.ts` refreshes session on every request
 4. `submit/page.tsx` gates on auth — redirects to GitHub login if unauthenticated
 
 Auth-required API routes check `auth.getUser()` then look up the internal user via `users.findByGithubId()`. The Supabase Auth user ID maps to `users.github_id`.
