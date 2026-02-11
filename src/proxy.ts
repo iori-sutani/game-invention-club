@@ -1,6 +1,8 @@
 import { type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/db/middleware';
 
+// supabaseの認証セッションを更新するためのプロキシ関数
+// エントリーポイントなので特に参照される必要なし
 export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
