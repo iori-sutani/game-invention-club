@@ -8,20 +8,20 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 relative overflow-hidden">
-        <div className="text-center mb-16 relative z-10">
-          <div className="inline-block mb-8 animate-float">
-            <div className="w-32 h-32 mx-auto bg-[#e45c10] border-4 border-black flex items-center justify-center shadow-[8px_8px_0_#000]">
-              <span className="text-6xl drop-shadow-md pixelated">💡</span>
+      <section className="container mx-auto px-3 py-16 relative overflow-hidden">
+        <div className="text-center mb-12 relative z-10">
+          <div className="inline-block mb-6 animate-float">
+            <div className="w-[104px] h-[104px] mx-auto bg-[#e45c10] border-[3px] border-black flex items-center justify-center shadow-[6px_6px_0_#000]">
+              <span className="text-5xl drop-shadow-md pixelated">💡</span>
             </div>
           </div>
-          
-          <h2 className="text-4xl md:text-6xl font-black text-[#8b4513] mb-6 leading-tight drop-shadow-[4px_4px_0_#fff] stroke-black" style={{ textShadow: '4px 4px 0 #fff, 6px 6px 0 #000' }}>
+
+          <h2 className="text-3xl md:text-5xl font-black text-[#8b4513] mb-5 leading-tight drop-shadow-[3px_3px_0_#fff] stroke-black" style={{ textShadow: '3px 3px 0 #fff, 5px 5px 0 #000' }}>
             新しいゲームを<br />発明しよう
           </h2>
-          
+
           <div className="nes-container inline-block max-w-3xl mx-auto transform -rotate-1">
-            <p className="text-xl md:text-2xl text-[#331100] leading-relaxed">
+            <p className="text-lg md:text-xl text-[#331100] leading-relaxed">
               既存のゲームに＋１の工夫を加えた<br />
               独創的なゲームを作って共有するコミュニティ
             </p>
@@ -29,7 +29,7 @@ export default function Home() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto relative z-10">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto relative z-10">
           <FeatureCard
             icon="🎨"
             title="創造性"
@@ -48,15 +48,15 @@ export default function Home() {
         </div>
 
         {/* CTA */}
-        <div className="mt-20 text-center relative z-10">
-          <div className="mb-4 text-[#e45c10] font-bold text-xl animate-blink">
+        <div className="mt-16 text-center relative z-10">
+          <div className="mb-3 text-[#e45c10] font-bold text-lg animate-blink">
              ▶ PRESS START
           </div>
-          <Link 
+          <Link
             href="/games"
-            className="inline-block pixel-button px-16 py-6 bg-[#8b4513] border-4 border-black text-white text-2xl font-bold tracking-wider transform hover:scale-105 shadow-[6px_6px_0_#000] hover:bg-[#5e300d]"
+            className="inline-block pixel-button px-12 py-5 bg-[#8b4513] border-[3px] border-black text-white text-xl font-bold tracking-wider transform hover:scale-105 shadow-[5px_5px_0_#000] hover:bg-[#5e300d]"
           >
-            ゲームを見る 
+            ゲームを見る
           </Link>
         </div>
       </section>
@@ -67,10 +67,10 @@ export default function Home() {
 
 function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
   return (
-    <div className="nes-container h-full transition-transform hover:-translate-y-2 hover:rotate-1">
-      <div className="text-5xl mb-4 text-center pixelated">{icon}</div>
-      <h3 className="text-2xl font-bold mb-3 text-center border-b-4 border-black pb-2 text-[#8b4513]">{title}</h3>
-      <p className="leading-relaxed mt-4 text-[#331100]">{description}</p>
+    <div className="nes-container h-full transition-transform hover:-translate-y-1.5 hover:rotate-1">
+      <div className="text-4xl mb-3 text-center pixelated">{icon}</div>
+      <h3 className="text-xl font-bold mb-2 text-center border-b-[3px] border-black pb-1.5 text-[#8b4513]">{title}</h3>
+      <p className="leading-relaxed mt-3 text-[#331100] text-sm">{description}</p>
     </div>
   );
 }

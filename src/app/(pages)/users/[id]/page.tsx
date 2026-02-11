@@ -74,10 +74,10 @@ export default function UserProfilePage() {
     return (
       <div className="font-pixel text-[#331100]">
         <Header />
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center py-20">
-            <div className="mb-4 animate-float"><Twemoji emoji="⏳" size={64} /></div>
-            <p className="text-2xl text-[#331100]">読み込み中...</p>
+        <div className="container mx-auto px-3 py-10">
+          <div className="text-center py-16">
+            <div className="mb-3 animate-float"><Twemoji emoji="⏳" size={51} /></div>
+            <p className="text-xl text-[#331100]">読み込み中...</p>
           </div>
         </div>
       </div>
@@ -88,10 +88,10 @@ export default function UserProfilePage() {
     return (
       <div className="font-pixel text-[#331100]">
         <Header />
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center py-20">
-            <div className="mb-4"><Twemoji emoji="😢" size={64} /></div>
-            <p className="text-2xl text-[#331100]">{error || 'ユーザーが見つかりませんでした'}</p>
+        <div className="container mx-auto px-3 py-10">
+          <div className="text-center py-16">
+            <div className="mb-3"><Twemoji emoji="😢" size={51} /></div>
+            <p className="text-xl text-[#331100]">{error || 'ユーザーが見つかりませんでした'}</p>
           </div>
         </div>
       </div>
@@ -102,44 +102,44 @@ export default function UserProfilePage() {
     <div className="font-pixel text-[#331100]">
       <Header />
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-3 py-10">
         {/* Profile Section */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-10">
           <div className="nes-container bg-white w-full max-w-2xl">
-          <div className="flex flex-col items-center gap-6 p-6">
+          <div className="flex flex-col items-center gap-5 p-5">
             {/* Avatar */}
-            <div className="w-32 h-32 border-4 border-black overflow-hidden bg-[#f8dcb4] flex items-center justify-center">
+            <div className="w-[104px] h-[104px] border-[3px] border-black overflow-hidden bg-[#f8dcb4] flex items-center justify-center">
               {user.avatar_url ? (
                 <Image
                   src={user.avatar_url}
                   alt={user.username}
-                  width={128}
-                  height={128}
+                  width={104}
+                  height={104}
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Twemoji emoji="👤" size={64} />
+                <Twemoji emoji="👤" size={51} />
               )}
             </div>
 
             {/* User Info */}
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-[#8b4513] mb-2" style={{ textShadow: '2px 2px 0 #fff' }}>
+              <h1 className="text-2xl font-bold text-[#8b4513] mb-1.5" style={{ textShadow: '1.5px 1.5px 0 #fff' }}>
                 {user.username}
               </h1>
-              <p className="text-[#331100] mb-4">
+              <p className="text-[#331100] mb-3 text-sm">
                 {formatDate(user.created_at)} から参加
               </p>
 
               {/* Stats */}
-              <div className="flex justify-center gap-6">
+              <div className="flex justify-center gap-5">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#e45c10]">{user.games_count}</div>
-                  <div className="text-sm text-[#331100]">投稿ゲーム</div>
+                  <div className="text-xl font-bold text-[#e45c10]">{user.games_count}</div>
+                  <div className="text-xs text-[#331100]">投稿ゲーム</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#e45c10]">{user.total_likes}</div>
-                  <div className="text-sm text-[#331100]">獲得いいね</div>
+                  <div className="text-xl font-bold text-[#e45c10]">{user.total_likes}</div>
+                  <div className="text-xs text-[#331100]">獲得いいね</div>
                 </div>
               </div>
             </div>
@@ -148,20 +148,20 @@ export default function UserProfilePage() {
         </div>
 
         {/* Games Section */}
-        <h2 className="text-3xl font-bold text-[#8b4513] mt-8 mb-8 text-center" style={{ textShadow: '2px 2px 0 #fff' }}>
+        <h2 className="text-2xl font-bold text-[#8b4513] mt-6 mb-6 text-center" style={{ textShadow: '1.5px 1.5px 0 #fff' }}>
           投稿したゲーム
         </h2>
 
         {games.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {games.map(game => (
               <GameCard key={game.id} game={game} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="mb-4"><Twemoji emoji="🎮" size={64} /></div>
-            <p className="text-xl text-[#331100]">まだゲームを投稿していません</p>
+          <div className="text-center py-10">
+            <div className="mb-3"><Twemoji emoji="🎮" size={51} /></div>
+            <p className="text-lg text-[#331100]">まだゲームを投稿していません</p>
           </div>
         )}
       </div>

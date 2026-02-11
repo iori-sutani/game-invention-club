@@ -55,11 +55,11 @@ export function GameCard({ game }: GameCardProps) {
 
   return (
     <div className="group h-full">
-      <div className="nes-container h-full transition-transform group-hover:-translate-y-2 !p-0 overflow-hidden bg-white">
+      <div className="nes-container h-full transition-transform group-hover:-translate-y-1.5 !p-0 overflow-hidden bg-white">
         {/* Screenshot */}
-        <div className="aspect-video bg-[#f8dcb4] flex items-center justify-center border-b-4 border-black relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
+        <div className="aspect-video bg-[#f8dcb4] flex items-center justify-center border-b-[3px] border-black relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
           {/* Scanline decoration for cards */}
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #000 2px, #000 4px)' }}></div>
+          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1.5px, #000 1.5px, #000 3px)' }}></div>
           {game.screenshot_url ? (
             <Image
               src={game.screenshot_url}
@@ -69,25 +69,25 @@ export function GameCard({ game }: GameCardProps) {
               className="object-cover relative z-10"
             />
           ) : (
-            <Twemoji emoji="🎮" size={96} className="relative z-10 drop-shadow-md" />
+            <Twemoji emoji="🎮" size={77} className="relative z-10 drop-shadow-md" />
           )}
         </div>
 
         {/* Content */}
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-[#8b4513] mb-2 group-hover:text-[#c46237] transition-colors">
+        <div className="p-5">
+          <h3 className="text-lg font-bold text-[#8b4513] mb-1.5 group-hover:text-[#c46237] transition-colors">
             {game.title}
           </h3>
-          <p className="text-[#331100] mb-4 line-clamp-2 text-sm">
+          <p className="text-[#331100] mb-3 line-clamp-2 text-xs">
             {game.description}
           </p>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-1.5 mb-3">
             {game.tags.map(tag => (
               <span
                 key={tag.id}
-                className="px-2 py-1 bg-gray-100 text-[#331100] text-xs border-2 border-black"
+                className="px-1.5 py-0.5 bg-gray-100 text-[#331100] text-xs border-[1.5px] border-black"
               >
                 {tag.name}
               </span>
@@ -95,7 +95,7 @@ export function GameCard({ game }: GameCardProps) {
           </div>
 
           {/* Author & Likes */}
-          <div className="flex items-center justify-between mb-4 text-[#c46237] text-sm font-bold">
+          <div className="flex items-center justify-between mb-3 text-[#c46237] text-xs font-bold">
             <Link
               href={`/users/${game.user.id}`}
               className="hover:text-[#8b4513] hover:underline transition-colors"
@@ -105,24 +105,24 @@ export function GameCard({ game }: GameCardProps) {
             <button
               onClick={handleLike}
               disabled={isLoading}
-              className={`flex items-center gap-1 transition-all ${
+              className={`flex items-center gap-0.5 transition-all ${
                 isLiked
                   ? 'text-[#e45c10] scale-110'
                   : 'text-gray-400 hover:text-[#e45c10] hover:scale-105'
               } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               title={isLiked ? 'いいねを取り消す' : 'いいねする'}
             >
-              <Twemoji emoji={isLiked ? '❤️' : '🤍'} size={16} /> {likesCount}
+              <Twemoji emoji={isLiked ? '❤️' : '🤍'} size={13} /> {likesCount}
             </button>
           </div>
 
           {/* Links */}
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             <a
               href={game.vercel_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 pixel-button px-4 py-2 bg-[#fbad08] hover:bg-[#8b4513] text-black text-center font-bold transition-all shadow-[2px_2px_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="flex-1 pixel-button px-3 py-1.5 bg-[#fbad08] hover:bg-[#8b4513] text-black text-center font-bold transition-all shadow-[1.5px_1.5px_0_#000] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none"
             >
               プレイ
             </a>
@@ -131,10 +131,10 @@ export function GameCard({ game }: GameCardProps) {
                 href={game.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button px-4 py-2 bg-[#333] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button px-3 py-1.5 bg-[#333] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[1.5px_1.5px_0_#000]"
                 title="GitHub"
               >
-                <Twemoji emoji="📦" size={16} />
+                <Twemoji emoji="📦" size={13} />
               </a>
             )}
             {game.qiita_url && (
@@ -142,10 +142,10 @@ export function GameCard({ game }: GameCardProps) {
                 href={game.qiita_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button px-4 py-2 bg-[#8b4513] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button px-3 py-1.5 bg-[#8b4513] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[1.5px_1.5px_0_#000]"
                 title="Qiita"
               >
-                <Twemoji emoji="📝" size={16} />
+                <Twemoji emoji="📝" size={13} />
               </a>
             )}
             </div>

@@ -63,38 +63,38 @@ export default function GamesPage() {
 
       <Header />
 
-      <div className="container mx-auto px-4 py-12 min-h-screen">
+      <div className="container mx-auto px-3 py-10 min-h-screen">
         {/* Title */}
-        <h2 className="text-4xl md:text-5xl font-black text-[#8b4513] mb-8 text-center drop-shadow-[3px_3px_0_#fff]" style={{ textShadow: '3px 3px 0 #fff, 5px 5px 0 #000' }}>
+        <h2 className="text-3xl md:text-4xl font-black text-[#8b4513] mb-6 text-center drop-shadow-[2px_2px_0_#fff]" style={{ textShadow: '2px 2px 0 #fff, 4px 4px 0 #000' }}>
           ゲーム一覧
         </h2>
 
         {/* Search & Filter */}
-        <div className="mb-12 max-w-4xl mx-auto">
+        <div className="mb-10 max-w-4xl mx-auto">
           {/* Search Box */}
-          <div className="mb-6">
+          <div className="mb-5">
             <input
               type="text"
               placeholder="ゲームを検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-4 bg-white border-4 border-black text-[#331100] text-lg focus:outline-none focus:border-[#8b4513] transition-colors shadow-[4px_4px_0_#000]"
+              className="w-full px-5 py-3 bg-white border-[3px] border-black text-[#331100] text-base focus:outline-none focus:border-[#8b4513] transition-colors shadow-[3px_3px_0_#000]"
             />
           </div>
 
 
           {/* Tag Filter */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {allTags.map(tag => {
               const isSelected = selectedTags.includes(tag.name);
               return (
                 <button
                   key={tag.id}
                   onClick={() => toggleTag(tag.name)}
-                  className={`pixel-button px-4 py-2 font-bold transition-all border-4 ${
+                  className={`pixel-button px-3 py-1.5 font-bold transition-all border-[3px] ${
                     isSelected
-                      ? '!bg-[#e45c10] !text-white translate-x-[2px] translate-y-[2px] !shadow-none !border-black'
-                      : '!bg-white !text-black hover:!bg-gray-100 shadow-[4px_4px_0_#000] !border-black'
+                      ? '!bg-[#e45c10] !text-white translate-x-[1.5px] translate-y-[1.5px] !shadow-none !border-black'
+                      : '!bg-white !text-black hover:!bg-gray-100 shadow-[3px_3px_0_#000] !border-black'
                   }`}
                 >
                   {tag.name}
@@ -106,23 +106,23 @@ export default function GamesPage() {
 
         {/* Loading State */}
         {loading ? (
-          <div className="text-center py-20">
-            <div className="mb-4 animate-float"><Twemoji emoji="⏳" size={64} /></div>
-            <p className="text-2xl text-[#331100]">読み込み中...</p>
+          <div className="text-center py-16">
+            <div className="mb-3 animate-float"><Twemoji emoji="⏳" size={51} /></div>
+            <p className="text-xl text-[#331100]">読み込み中...</p>
           </div>
         ) : (
           <>
             {/* Games Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {games.map(game => (
                 <GameCard key={game.id} game={game} />
               ))}
             </div>
 
             {games.length === 0 && (
-              <div className="text-center py-20">
-                <div className="mb-4"><Twemoji emoji="🔍" size={64} /></div>
-                <p className="text-2xl text-[#331100]">ゲームが見つかりませんでした</p>
+              <div className="text-center py-16">
+                <div className="mb-3"><Twemoji emoji="🔍" size={51} /></div>
+                <p className="text-xl text-[#331100]">ゲームが見つかりませんでした</p>
               </div>
             )}
           </>

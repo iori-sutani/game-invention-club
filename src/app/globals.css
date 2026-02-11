@@ -21,38 +21,38 @@ body {
 .pixel-text {
   /* Use variables */
   font-family: var(--font-press-start), var(--font-dot-gothic), cursive;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  text-shadow: 1.5px 1.5px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* ピクセル風ボーダー（NES風） */
 .pixel-box, .pixel-corners {
   background-color: #000;
-  border: 4px solid #fff;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  border: 3px solid #fff;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
   color: #fff;
 }
 
 .pixel-card {
   background-color: #ffffff;
-  border: 4px solid #000;
-  box-shadow: 6px 6px 0 #000;
+  border: 3px solid #000;
+  box-shadow: 5px 5px 0 #000;
   color: #331100;
 }
 
 /* ピクセル風ボタン（マリオ風・濃いオレンジ強調） */
 .pixel-button {
   position: relative;
-  border: 4px solid #000;
+  border: 3px solid #000;
   background-color: #e45c10; /* Mario Ground (Dark Orange) */
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  box-shadow: 4px 4px 0 #000;
+  box-shadow: 3px 3px 0 #000;
   transition: all 0.1s;
 }
 
 .pixel-button:active {
-  transform: translate(4px, 4px);
+  transform: translate(3px, 3px);
   box-shadow: none;
 }
 
@@ -60,7 +60,7 @@ body {
   background-color: #8b4513; /* Saddle Brown */
   color: #fff;
   border-color: #fff;
-  box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
 }
 
 /* フローティングアニメーション */
@@ -69,7 +69,7 @@ body {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 }
 
@@ -93,19 +93,19 @@ body {
 
 /* レトロなスクロールバー */
 ::-webkit-scrollbar {
-  width: 16px;
+  width: 13px;
   background-color: #f8dcb4;
 }
 
 ::-webkit-scrollbar-track {
   background-color: #f8dcb4;
-  border-left: 4px solid #331100;
+  border-left: 3px solid #331100;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #8b4513;
-  border: 4px solid #f8dcb4;
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2);
+  border: 3px solid #f8dcb4;
+  box-shadow: inset -1.5px -1.5px 0 rgba(0,0,0,0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -125,51 +125,51 @@ body {
     rgba(18, 16, 16, 0) 50%,
     rgba(0, 0, 0, 0.05) 50%
   );
-  background-size: 100% 4px;
+  background-size: 100% 3px;
 }
 
 /* ドット絵風背景パターン - 背景用 */
 .pixel-pattern-bg {
   background-color: #f8dcb4;
-  background-image: 
-    linear-gradient(45deg, rgba(228, 92, 16, 0.1) 25%, transparent 25%), 
-    linear-gradient(-45deg, rgba(228, 92, 16, 0.1) 25%, transparent 25%), 
-    linear-gradient(45deg, transparent 75%, rgba(228, 92, 16, 0.1) 75%), 
+  background-image:
+    linear-gradient(45deg, rgba(228, 92, 16, 0.1) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(228, 92, 16, 0.1) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(228, 92, 16, 0.1) 75%),
     linear-gradient(-45deg, transparent 75%, rgba(228, 92, 16, 0.1) 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 }
 
 /* NES風コンテナ */
 .nes-container {
   position: relative;
   background-color: white;
-  padding: 1.5rem;
+  padding: 1.2rem;
   border-style: solid;
-  border-width: 4px;
+  border-width: 3px;
   border-image-slice: 2;
   border-image-width: 2;
   border-image-outset: 0;
-  border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="black" /></svg>'); 
+  border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="black" /></svg>');
   /* Fallback or easier implementation with box-shadows is better for reliability */
-  border: 4px solid #000;
-  box-shadow: 
-    -4px -4px 0 #000, 
-    4px -4px 0 #000, 
-    -4px 4px 0 #000, 
-    4px 4px 0 #000;
-  margin: 4px;
+  border: 3px solid #000;
+  box-shadow:
+    -3px -3px 0 #000,
+    3px -3px 0 #000,
+    -3px 3px 0 #000,
+    3px 3px 0 #000;
+  margin: 3px;
 }
 
 .nes-container.is-dark {
   background-color: #000;
   color: #fff;
   border-color: #fff;
-  box-shadow: 
-    -4px -4px 0 #fff, 
-    4px -4px 0 #fff, 
-    -4px 4px 0 #fff, 
-    4px 4px 0 #fff;
+  box-shadow:
+    -3px -3px 0 #fff,
+    3px -3px 0 #fff,
+    -3px 3px 0 #fff,
+    3px 3px 0 #fff;
 }
 
 /* リンクホバー効果 */
