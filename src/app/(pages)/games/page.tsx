@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { GameCard } from '@/components/GameCard';
+import { Twemoji } from '@/components/Twemoji';
 import type { GameWithDetails, Tag } from '@/types/database';
 
 export default function GamesPage() {
@@ -106,7 +107,7 @@ export default function GamesPage() {
         {/* Loading State */}
         {loading ? (
           <div className="text-center py-20">
-            <div className="text-6xl mb-4 pixelated animate-float">⏳</div>
+            <div className="mb-4 animate-float"><Twemoji emoji="⏳" size={64} /></div>
             <p className="text-2xl text-[#331100]">読み込み中...</p>
           </div>
         ) : (
@@ -120,7 +121,7 @@ export default function GamesPage() {
 
             {games.length === 0 && (
               <div className="text-center py-20">
-                <div className="text-6xl mb-4 pixelated">🔍</div>
+                <div className="mb-4"><Twemoji emoji="🔍" size={64} /></div>
                 <p className="text-2xl text-[#331100]">ゲームが見つかりませんでした</p>
               </div>
             )}

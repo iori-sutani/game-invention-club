@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/db/client';
+import { Twemoji } from '@/components/Twemoji';
 import type { User } from '@supabase/supabase-js';
 
 export function Header() {
@@ -72,7 +73,7 @@ export function Header() {
       <nav className="px-4 md:px-8 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-12 h-12 bg-[#fbad08] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_#000]">
-            <span className="text-2xl pixelated">🎮</span>
+            <Twemoji emoji="🎮" size={24} />
           </div>
           <h1 className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-[2px_2px_0_#900] group-hover:text-[#fbad08] transition-colors">
             ゲーム発明会
@@ -120,7 +121,7 @@ export function Header() {
                     className="object-cover"
                   />
                 ) : (
-                  <span className="text-lg md:text-xl pixelated">👤</span>
+                  <Twemoji emoji="👤" size={24} />
                 )}
               </Link>
               <button

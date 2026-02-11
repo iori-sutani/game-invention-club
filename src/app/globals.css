@@ -203,3 +203,43 @@ textarea::placeholder {
 img {
   image-rendering: pixelated;
 }
+
+/* Twemoji スタイル */
+span[data-twemoji-size] img.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 0.05em 0 0.1em;
+  vertical-align: -0.1em;
+  image-rendering: pixelated;
+  filter: url(#pixelate);
+}
+
+span[data-twemoji-size="16"] img.emoji {
+  height: 16px;
+  width: 16px;
+}
+
+span[data-twemoji-size="24"] img.emoji {
+  height: 24px;
+  width: 24px;
+}
+
+span[data-twemoji-size="32"] img.emoji {
+  height: 32px;
+  width: 32px;
+}
+
+span[data-twemoji-size="48"] img.emoji {
+  height: 48px;
+  width: 48px;
+}
+
+span[data-twemoji-size="64"] img.emoji {
+  height: 64px;
+  width: 64px;
+}
+
+span[data-twemoji-size="96"] img.emoji {
+  height: 96px;
+  width: 96px;
+}

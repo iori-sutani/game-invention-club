@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Header } from '@/components/Header';
 import { GameCard } from '@/components/GameCard';
+import { Twemoji } from '@/components/Twemoji';
 import type { GameWithDetails, User } from '@/types/database';
 
 interface UserProfile extends User {
@@ -75,7 +76,7 @@ export default function UserProfilePage() {
         <Header />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-20">
-            <div className="text-6xl mb-4 pixelated animate-float">⏳</div>
+            <div className="mb-4 animate-float"><Twemoji emoji="⏳" size={64} /></div>
             <p className="text-2xl text-[#331100]">読み込み中...</p>
           </div>
         </div>
@@ -89,7 +90,7 @@ export default function UserProfilePage() {
         <Header />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-20">
-            <div className="text-6xl mb-4 pixelated">😢</div>
+            <div className="mb-4"><Twemoji emoji="😢" size={64} /></div>
             <p className="text-2xl text-[#331100]">{error || 'ユーザーが見つかりませんでした'}</p>
           </div>
         </div>
@@ -117,7 +118,7 @@ export default function UserProfilePage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-6xl pixelated">👤</span>
+                <Twemoji emoji="👤" size={64} />
               )}
             </div>
 
@@ -159,7 +160,7 @@ export default function UserProfilePage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4 pixelated">🎮</div>
+            <div className="mb-4"><Twemoji emoji="🎮" size={64} /></div>
             <p className="text-xl text-[#331100]">まだゲームを投稿していません</p>
           </div>
         )}

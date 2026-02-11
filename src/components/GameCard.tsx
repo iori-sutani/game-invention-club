@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { GameWithDetails } from '@/types/database';
+import { Twemoji } from '@/components/Twemoji';
 
 interface GameCardProps {
   game: GameWithDetails;
@@ -68,7 +69,7 @@ export function GameCard({ game }: GameCardProps) {
               className="object-cover relative z-10"
             />
           ) : (
-            <span className="text-8xl relative z-10 drop-shadow-md pixelated">🎮</span>
+            <Twemoji emoji="🎮" size={96} className="relative z-10 drop-shadow-md" />
           )}
         </div>
 
@@ -111,7 +112,7 @@ export function GameCard({ game }: GameCardProps) {
               } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               title={isLiked ? 'いいねを取り消す' : 'いいねする'}
             >
-              <span className="pixelated">{isLiked ? '❤️' : '🤍'}</span> {likesCount}
+              <Twemoji emoji={isLiked ? '❤️' : '🤍'} size={16} /> {likesCount}
             </button>
           </div>
 
@@ -130,10 +131,10 @@ export function GameCard({ game }: GameCardProps) {
                 href={game.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button pixelated px-4 py-2 bg-[#333] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button px-4 py-2 bg-[#333] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
                 title="GitHub"
               >
-                📦
+                <Twemoji emoji="📦" size={16} />
               </a>
             )}
             {game.qiita_url && (
@@ -141,12 +142,12 @@ export function GameCard({ game }: GameCardProps) {
                 href={game.qiita_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pixel-button pixelated px-4 py-2 bg-[#8b4513] hover:bg-[#8b4513]  text-white font-bold transition-all shadow-[2px_2px_0_#000]"
+                className="pixel-button px-4 py-2 bg-[#8b4513] hover:bg-[#8b4513] text-white font-bold transition-all shadow-[2px_2px_0_#000]"
                 title="Qiita"
               >
-                  📝
-                </a>
-              )}
+                <Twemoji emoji="📝" size={16} />
+              </a>
+            )}
             </div>
           </div>
         </div>

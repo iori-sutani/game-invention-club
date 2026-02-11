@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Header } from '@/components/Header';
+import { Twemoji } from '@/components/Twemoji';
 import { createClient } from '@/lib/db/client';
 import type { User } from '@supabase/supabase-js';
 import type { Tag } from '@/types/database';
@@ -238,8 +239,8 @@ export default function SubmitPage() {
         <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[60] animate-bounce">
           <div className="bg-[#fbad08] nes-container !p-0">
             <div className="bg-white px-8 py-4">
-              <p className="text-2xl text-black font-bold">
-                🎉 投稿成功!
+              <p className="text-2xl text-black font-bold flex items-center gap-2">
+                <Twemoji emoji="🎉" size={24} /> 投稿成功!
               </p>
             </div>
           </div>
@@ -252,12 +253,12 @@ export default function SubmitPage() {
 
         {authLoading ? (
           <div className="text-center py-20">
-            <div className="text-6xl mb-4 pixelated animate-float">⏳</div>
+            <div className="mb-4 animate-float"><Twemoji emoji="⏳" size={64} /></div>
             <p className="text-2xl text-[#331100]">読み込み中...</p>
           </div>
         ) : !user ? (
           <div className="text-center py-20">
-            <div className="text-6xl mb-8 pixelated">🔒</div>
+            <div className="mb-8"><Twemoji emoji="🔒" size={64} /></div>
             <p className="text-2xl text-[#331100] mb-8">投稿するにはログインが必要です</p>
             <button
               onClick={handleLogin}
@@ -272,7 +273,7 @@ export default function SubmitPage() {
             <div className="text-center mb-12">
               <div className="inline-block mb-6">
                 <div className="w-24 h-24 bg-white nes-container !p-0 flex items-center justify-center animate-float">
-                  <span className="text-5xl pixelated">📤</span>
+                  <Twemoji emoji="📤" size={48} />
                 </div>
               </div>
               <h2 className="text-4xl md:text-5xl font-black text-[#8b4513] mb-4 drop-shadow-[3px_3px_0_#fff]" style={{ textShadow: '3px 3px 0 #fff, 5px 5px 0 #000' }}>
@@ -396,7 +397,7 @@ export default function SubmitPage() {
                     </div>
                   ) : (
                     <div className="text-center">
-                      <div className="text-5xl mb-4 pixelated">📷</div>
+                      <div className="mb-4"><Twemoji emoji="📷" size={48} /></div>
                       <p className="text-lg text-[#331100] font-bold mb-2">
                         クリックまたはドラッグ&ドロップ
                       </p>
@@ -507,7 +508,7 @@ export default function SubmitPage() {
 
             {/* Info Box */}
             <div className="mt-12 bg-white nes-container">
-              <h3 className="text-2xl font-bold text-[#8b4513] mb-3 border-b-4 border-black pb-2">📋 投稿ガイドライン</h3>
+              <h3 className="text-2xl font-bold text-[#8b4513] mb-3 border-b-4 border-black pb-2 flex items-center gap-2"><Twemoji emoji="📋" size={24} /> 投稿ガイドライン</h3>
               <ul className="space-y-4 text-[#331100] list-disc list-inside">
                 <li>既存ゲームのコピーではなく、独自の工夫があること</li>
                 <li>遊ぶ際にアカウント作成やログインを求めないこと（誰でもすぐに遊べるようにしてください）</li>
