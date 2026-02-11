@@ -13,7 +13,7 @@ npm run lint     # Run ESLint (next/core-web-vitals + next/typescript)
 
 No test framework is configured. There are no test scripts or test files.
 
-Supabase setup: copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Run all migration files in `supabase/migrations/` in order (001 → 004) via Supabase dashboard SQL Editor or CLI.
+Supabase setup: copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Run `supabase/migrations/001_initial_schema.sql` via Supabase dashboard SQL Editor or CLI.
 
 ## Architecture
 
@@ -55,13 +55,9 @@ Retro pixel-art / NES aesthetic. All UI uses this consistently:
 ### Backend (Supabase)
 
 - **Client**: `lib/db/client.ts` (browser), `lib/db/server.ts` (server-side with cookie management)
-- **Proxy**: `lib/db/middleware.ts` called from `src/proxy.ts` — refreshes auth session on every request. No code should be placed between client creation and `getUser()` call in the proxy.
+- **Session refresh**: `src/proxy.ts` calls `lib/db/middleware.ts` to refresh auth session on every request. Export `proxy` function and `config` matcher from `src/proxy.ts` for Next.js middleware integration.
 - **Types**: `types/database.ts` — auto-generated Supabase types, plus utility types (`User`, `Game`, `Tag`, `Like`, `GameWithDetails`)
-- **Schema**: `supabase/migrations/` — run in order:
-  - `001_initial_schema.sql`: tables (`users`, `games`, `tags`, `game_tags`, `likes`), RLS policies, triggers
-  - `002_storage_bucket.sql`: Storage bucket policies for `screenshots`
-  - `003_users_insert_policy.sql`: Additional RLS for user creation
-  - `004_remove_default_tags.sql`: Cleanup migration
+- **Schema**: `supabase/migrations/001_initial_schema.sql` — tables, RLS policies, triggers, Storage bucket setup (all-in-one)
 
 ### Auth Flow
 
@@ -104,9 +100,6 @@ Not yet implemented:
 - Comment functionality
 - Contest functionality
 
-### Supabase Storage Setup
+### Supabase Storage
 
-Before using image upload, create a Storage bucket in Supabase Dashboard:
-1. Go to Storage → Create bucket
-2. Name: `screenshots`, Public: Yes
-3. Add RLS policies (see `supabase/migrations/002_storage_bucket.sql` for details)
+The `screenshots` bucket and its RLS policies are created automatically by `001_initial_schema.sql`. File naming convention: `{user_id}/{timestamp}.{extension}`

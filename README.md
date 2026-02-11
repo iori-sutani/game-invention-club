@@ -51,6 +51,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
 Supabaseダッシュボードの SQL Editor、または Supabase CLI で `supabase/migrations/001_initial_schema.sql` を実行する。
 
+これにより以下が作成される:
+- テーブル (`users`, `games`, `tags`, `game_tags`, `likes`)
+- RLSポリシー
+- トリガー (updated_at, tag usage count)
+- Storageバケット (`screenshots`) とポリシー
+
 ### 4. 開発サーバーの起動
 
 ```bash
@@ -112,9 +118,9 @@ game-invention-club/
 │   │           └── likes.ts                # ILikeRepository実装
 │   ├── types/
 │   │   └── database.ts                     # Supabase型定義
-│   └── middleware.ts                       # Next.jsミドルウェア
+│   └── proxy.ts                            # Next.jsミドルウェア (セッション更新)
 ├── supabase/migrations/
-│   └── 001_initial_schema.sql              # DBスキーマ
+│   └── 001_initial_schema.sql              # DBスキーマ (テーブル・RLS・Storage全部入り)
 ├── tailwind.config.ts
 ├── tsconfig.json
 └── next.config.ts
@@ -164,6 +170,7 @@ const { user } = await auth.getUser();
 - [x] 投稿ページのログインゲート
 - [x] いいねボタン
 - [x] ユーザープロフィールページ
+- [] ユーザーページのゲームカードに対して削除ボタンを追加する。
 
 ### バックエンド (API)
 
@@ -174,11 +181,13 @@ const { user } = await auth.getUser();
 - [x] GitHub OAuth コールバック (`/api/auth/callback`)
 - [x] DBスキーマ・マイグレーション
 - [x] RLS (Row Level Security)
+- [] ゲーム削除API(`/api/games[id]/delete`)
 
-### 未実装
+### 実装予定(やるかどうかは検討中)
 
 - [ ] コメント機能
 - [ ] コンテスト機能
+- [] タグ使用量ランキング機能
 
 ## 投稿ガイドライン
 
