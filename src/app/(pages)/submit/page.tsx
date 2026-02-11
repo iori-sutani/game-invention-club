@@ -5,14 +5,12 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Header } from '@/components/Header';
 import { Twemoji } from '@/components/Twemoji';
-import { createClient } from '@/lib/db/client';
-import type { User } from '@supabase/supabase-js';
+import { useAuth } from '@/hooks/useAuth';
 import type { Tag } from '@/types/database';
 
 export default function SubmitPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const { user, loading: authLoading, login } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,23 +49,8 @@ export default function SubmitPage() {
   }, []);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      setAuthLoading(false);
-    });
     fetchTags();
   }, [fetchTags]);
-
-  const handleLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback?next=/submit`,
-      },
-    });
-  };
 
   const toggleTag = (tag: string) => {
     setFormData(prev => ({
@@ -261,7 +244,7 @@ export default function SubmitPage() {
             <div className="mb-8"><Twemoji emoji="🔒" size={64} /></div>
             <p className="text-2xl text-[#331100] mb-8">投稿するにはログインが必要です</p>
             <button
-              onClick={handleLogin}
+              onClick={() => login('/submit')}
               className="pixel-button px-12 py-6 bg-[#333] text-white text-xl hover:bg-yellow-300 shadow-[6px_6px_0_#000] inline-flex items-center gap-3"
             >
               GitHubでログイン

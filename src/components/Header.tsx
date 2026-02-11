@@ -3,70 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/db/client';
 import { Twemoji } from '@/components/Twemoji';
-import type { User } from '@supabase/supabase-js';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
-  const [internalUserId, setInternalUserId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, internalUserId, loading, avatarUrl, username, login, logout } = useAuth();
 
   const isGamesActive = pathname === '/games';
   const isSubmitActive = pathname === '/submit';
-
-  useEffect(() => {
-    const supabase = createClient();
-
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      setLoading(false);
-
-      if (user) {
-        fetch('/api/users/me')
-          .then(res => res.ok ? res.json() : null)
-          .then(data => {
-            if (data?.id) {
-              setInternalUserId(data.id);
-            }
-          })
-          .catch(() => {});
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
-        if (!session?.user) {
-          setInternalUserId(null);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
-  };
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    setUser(null);
-    window.location.href = '/';
-  };
-
-  const avatarUrl = user?.user_metadata?.avatar_url;
-  const username = user?.user_metadata?.user_name || user?.user_metadata?.name || 'User';
 
   return (
     <header className="border-b-4 border-black bg-[#8b4513] sticky top-0 z-50">
@@ -125,7 +70,7 @@ export function Header() {
                 )}
               </Link>
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#5e300d] text-white hover:bg-[#8b4513] shadow-[4px_4px_0_#000]"
               >
                 ログアウト
@@ -133,7 +78,7 @@ export function Header() {
             </div>
           ) : (
             <button
-              onClick={handleLogin}
+              onClick={() => login()}
               className="pixel-button px-3 md:px-6 py-2 md:py-3 bg-[#333] text-white hover:bg-[#8b4513] hover:text-black shadow-[4px_4px_0_#000]"
             >
               ログイン
