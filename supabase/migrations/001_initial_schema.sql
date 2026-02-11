@@ -209,7 +209,53 @@ CREATE POLICY "Users can delete own likes"
   );
 
 -- =============================================
--- Storage bucket for screenshots
+-- Additional Users policy (INSERT)
 -- =============================================
--- Note: Run this in Supabase Dashboard -> Storage
--- CREATE BUCKET screenshots WITH (public = true);
+
+-- Allow authenticated users to create their own user record
+CREATE POLICY "Authenticated users can create own profile"
+ON users FOR INSERT
+WITH CHECK (
+  auth.uid() IS NOT NULL
+  AND github_id = auth.uid()::text
+);
+
+-- =============================================
+-- Storage bucket for game screenshots
+-- =============================================
+
+-- 1. Create the storage bucket
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('screenshots', 'screenshots', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- 2. Policy: Allow public read access
+CREATE POLICY "Public read access"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'screenshots');
+
+-- 3. Policy: Allow authenticated users to upload
+CREATE POLICY "Authenticated users can upload"
+ON storage.objects FOR INSERT
+WITH CHECK (
+  bucket_id = 'screenshots'
+  AND auth.role() = 'authenticated'
+);
+
+-- 4. Policy: Allow users to update their own uploads
+CREATE POLICY "Users can update own uploads"
+ON storage.objects FOR UPDATE
+USING (
+  bucket_id = 'screenshots'
+  AND auth.uid()::text = (storage.foldername(name))[1]
+);
+
+-- 5. Policy: Allow users to delete their own uploads
+CREATE POLICY "Users can delete own uploads"
+ON storage.objects FOR DELETE
+USING (
+  bucket_id = 'screenshots'
+  AND auth.uid()::text = (storage.foldername(name))[1]
+);
+
+-- File naming convention: {user_id}/{timestamp}.{extension}
