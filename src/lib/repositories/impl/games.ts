@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Database, Game, Tag } from '@/types/database';
+import { Database, Game, Tag, GameWithRelationsRaw } from '@/types/database';
 import { IGameRepository, GameDetail, CreateGameInput, UpdateGameInput } from '../interfaces';
 
 const GAME_WITH_RELATIONS_SELECT = `
@@ -9,8 +9,7 @@ const GAME_WITH_RELATIONS_SELECT = `
   likes(count)
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function transformGame(raw: any): GameDetail {
+function transformGame(raw: GameWithRelationsRaw): GameDetail {
   return {
     id: raw.id,
     user_id: raw.user_id,
@@ -23,7 +22,7 @@ function transformGame(raw: any): GameDetail {
     created_at: raw.created_at,
     updated_at: raw.updated_at,
     user: raw.user,
-    tags: raw.game_tags?.map((gt: { tag: Tag }) => gt.tag) || [],
+    tags: raw.game_tags?.map((gt) => gt.tag) || [],
     likes_count: raw.likes?.[0]?.count || 0,
   };
 }

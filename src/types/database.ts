@@ -199,3 +199,11 @@ export type GameWithDetails = Game & {
   likes_count: number;
   is_liked?: boolean;
 };
+
+// Raw Supabase response type for game with relations
+// Used internally for transforming query results
+export type GameWithRelationsRaw = Game & {
+  user: Pick<User, 'id' | 'username' | 'avatar_url'>; // FK constraint ensures user always exists
+  game_tags: { tag: Tag }[] | null;
+  likes: { count: number }[] | null;
+};
