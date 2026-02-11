@@ -157,37 +157,9 @@ const { user } = await auth.getUser();
 
 新しいデータアクセスを追加する場合は、まずインターフェースにメソッドを追加し、その後 `impl/` で実装する。
 
-## 機能と進捗
+## 開発状況
 
-### フロントエンド (UI)
-
-- [x] ホーム画面
-- [x] ゲーム一覧 (検索・タグフィルタリング)
-- [x] 投稿フォーム (タグ選択付き)
-- [x] レスポンシブデザイン
-- [x] 共通ヘッダーコンポーネント
-- [x] ログイン/ログアウトUI (GitHub OAuth)
-- [x] 投稿ページのログインゲート
-- [x] いいねボタン
-- [x] ユーザープロフィールページ
-- [] ユーザーページのゲームカードに対して削除ボタンを追加する。
-
-### バックエンド (API)
-
-- [x] ゲームCRUD (`/api/games`)
-- [x] いいねAPI (`/api/games/[id]/like`)
-- [x] タグAPI (`/api/tags`)
-- [x] ユーザーAPI (`/api/users`)
-- [x] GitHub OAuth コールバック (`/api/auth/callback`)
-- [x] DBスキーマ・マイグレーション
-- [x] RLS (Row Level Security)
-- [] ゲーム削除API(`/api/games[id]/delete`)
-
-### 実装予定(やるかどうかは検討中)
-
-- [ ] コメント機能
-- [ ] コンテスト機能
-- [] タグ使用量ランキング機能
+進捗や今後の予定は [GitHub Issues](https://github.com/iori-sutani/game-invention-club/issues) で管理しています。
 
 ## 投稿ガイドライン
 
