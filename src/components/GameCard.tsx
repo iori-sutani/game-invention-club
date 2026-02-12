@@ -5,19 +5,29 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { GameWithDetails } from '@/types/database';
 import { Twemoji } from '@/components/Twemoji';
+import { LoginPromptModal } from '@/components/LoginPromptModal';
+import { useAuth } from '@/hooks/useAuth';
 
 interface GameCardProps {
   game: GameWithDetails;
 }
 
 export function GameCard({ game }: GameCardProps) {
+  const { user } = useAuth();
   const [isLiked, setIsLiked] = useState(game.is_liked ?? false);
   const [likesCount, setLikesCount] = useState(game.likes_count);
   const [isLoading, setIsLoading] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // 未ログイン時はログインプロンプトを表示
+    if (!user) {
+      setShowLoginPrompt(true);
+      return;
+    }
 
     if (isLoading) return;
     setIsLoading(true);
@@ -36,10 +46,6 @@ export function GameCard({ game }: GameCardProps) {
         // Revert on error
         setIsLiked(wasLiked);
         setLikesCount(prev => wasLiked ? prev + 1 : prev - 1);
-
-        if (res.status === 401) {
-          alert('いいねするにはログインが必要です');
-        }
       } else {
         const data = await res.json();
         setLikesCount(data.likes_count);
@@ -54,7 +60,13 @@ export function GameCard({ game }: GameCardProps) {
   };
 
   return (
-    <div className="group h-full">
+    <div className="group h-full relative">
+      <LoginPromptModal
+        isOpen={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        redirectPath="/games"
+      />
+
       <div className="nes-container h-full transition-transform group-hover:-translate-y-1.5 !p-0 overflow-hidden bg-white">
         {/* Screenshot */}
         <div className="aspect-video bg-[#f8dcb4] flex items-center justify-center border-b-[3px] border-black relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
@@ -110,7 +122,7 @@ export function GameCard({ game }: GameCardProps) {
                   ? 'text-[#e45c10] scale-110'
                   : 'text-gray-400 hover:text-[#e45c10] hover:scale-105'
               } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              title={isLiked ? 'いいねを取り消す' : 'いいねする'}
+              title={!user ? 'ログインしていいね' : isLiked ? 'いいねを取り消す' : 'いいねする'}
             >
               <Twemoji emoji={isLiked ? '❤️' : '🤍'} size={13} /> {likesCount}
             </button>

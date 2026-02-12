@@ -1,20 +1,30 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Twemoji } from '@/components/Twemoji';
+import { LoginPromptModal } from '@/components/LoginPromptModal';
 import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const pathname = usePathname();
   const { user, internalUserId, loading, avatarUrl, username, login, logout } = useAuth();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const isGamesActive = pathname === '/games';
   const isSubmitActive = pathname === '/submit';
 
   return (
-    <header className="border-b-[3px] border-black bg-[#8b4513] sticky top-0 z-50">
+    <>
+      <LoginPromptModal
+        isOpen={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        redirectPath="/submit"
+        message="投稿するには&#10;ログインが必要です"
+      />
+      <header className="border-b-[3px] border-black bg-[#8b4513] sticky top-0 z-50">
       <nav className="px-3 md:px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-10 h-10 bg-[#fbad08] border-[3px] border-black flex items-center justify-center shadow-[3px_3px_0_#000]">
@@ -36,16 +46,29 @@ export function Header() {
           >
             一覧
           </Link>
-          <Link
-            href="/submit"
-            className={`pixel-button px-2 md:px-5 py-1.5 md:py-2 no-underline shadow-[3px_3px_0_#000] ${
-              isSubmitActive
-                ? 'bg-[#c46237] text-white hover:bg-[#e45c10]'
-                : 'bg-[#fbad08] text-black hover:bg-[#8b4513] '
-            }`}
-          >
-            投稿
-          </Link>
+          {user ? (
+            <Link
+              href="/submit"
+              className={`pixel-button px-2 md:px-5 py-1.5 md:py-2 no-underline shadow-[3px_3px_0_#000] ${
+                isSubmitActive
+                  ? 'bg-[#c46237] text-white hover:bg-[#e45c10]'
+                  : 'bg-[#fbad08] text-black hover:bg-[#8b4513] '
+              }`}
+            >
+              投稿
+            </Link>
+          ) : (
+            <button
+              onClick={() => setShowLoginPrompt(true)}
+              className={`pixel-button px-2 md:px-5 py-1.5 md:py-2 shadow-[3px_3px_0_#000] ${
+                isSubmitActive
+                  ? 'bg-[#c46237] text-white hover:bg-[#e45c10]'
+                  : 'bg-[#fbad08] text-black hover:bg-[#8b4513] '
+              }`}
+            >
+              投稿
+            </button>
+          )}
 
           <div className="w-[2px] h-6 bg-[#5e300d]" />
 
@@ -87,5 +110,6 @@ export function Header() {
         </div>
       </nav>
     </header>
+    </>
   );
 }
