@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/db/server';
+import sharp from 'sharp';
+
+// 画像の最大サイズ（16:9、Retina対応）
+const MAX_WIDTH = 960;
+const MAX_HEIGHT = 540;
+const WEBP_QUALITY = 80;
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,16 +42,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 画像をリサイズ・WebPに変換
+    const arrayBuffer = await file.arrayBuffer();
+    const optimizedBuffer = await sharp(Buffer.from(arrayBuffer))
+      .resize(MAX_WIDTH, MAX_HEIGHT, {
+        fit: 'inside',
+        withoutEnlargement: true,
+      })
+      .webp({ quality: WEBP_QUALITY })
+      .toBuffer();
+
     // Generate unique filename
     const timestamp = Date.now();
-    const extension = file.name.split('.').pop() || 'png';
-    const filename = `${user.id}/${timestamp}.${extension}`;
+    const filename = `${user.id}/${timestamp}.webp`;
 
     // Upload to Supabase Storage
     const { data, error: uploadError } = await supabase.storage
       .from('screenshots')
-      .upload(filename, file, {
-        contentType: file.type,
+      .upload(filename, optimizedBuffer, {
+        contentType: 'image/webp',
         upsert: false,
       });
 
